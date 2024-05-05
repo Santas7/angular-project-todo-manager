@@ -1,5 +1,8 @@
 # TODO APP
 
+![image](https://github.com/Santas7/angular-project-todo-manager/assets/86359412/ec67685e-378f-4f21-b433-188c7f1e08ac)
+
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.0.
 
 ## Development server
