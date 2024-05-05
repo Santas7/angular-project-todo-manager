@@ -1,0 +1,5 @@
+<!-- app.component.html -->
+<div class="app-container">
+<app-add-todo (add)="addTodo($event)"></app-add-todo>
+<app-todo-list [todos]="todos" (delete)="deleteTodo($event)"></app-todo-list>
+</div>
