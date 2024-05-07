@@ -12,6 +12,7 @@ bower_components/
 
 # IDEs and editors
 .idea/
+.vscode/
 
 # misc
 .sass-cache/
@@ -29,7 +30,3 @@ e2e/*.map
 
 # System Files
 .DS_Store/
-
-# IDE files
-.idea/
-.vs/
