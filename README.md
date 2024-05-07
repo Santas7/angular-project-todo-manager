@@ -4,35 +4,46 @@
 
 ![](https://img.shields.io/badge/Code-Angular-informational?style=flat&logo=angular&color=CC342D)
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.0.
+Этот проект использует [Angular CLI](https://github.com/angular/angular-cli) версии 17.3.0.
 
 ---
 
-## Development server
+## Авторы
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+- [Вольгов Даниил]()
+- [Казаков Андрей]()
+- [Королева Алина]()
+- [Митерев Дмитрий]()
+- [Ненашев Дмитрий]()
+- [Панюшкин Андрей]()
+- [Уваров Никита]()
+- [Федоров Александр]()
 
-## Code scaffolding
+## Описание
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Веб приложение для управления задачами. Позволяет добавлять, удалять и редактировать задачи.
 
-## Build
+## Функционал
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+TODO...
 
-## Running unit tests
+## Используемые технологии
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+- Angular
+- TypeScript
+- Tailwind CSS???
 
-## Running end-to-end tests
+## Установка и запуск
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+### Установка Angular CLI
 
----
+Запустите `npm install` для установки всех зависимостей проекта.
 
-## Further help
+### Запуск сервера разработки
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+Запустите `ng serve` для сервера разработки. Перейдите к `http://localhost:4200/`. 
+Приложение автоматически применит изменения, если вы отредактируете какой-либо из исходных файлов.
 
----
+### Сборка проекта
 
+Запустите `ng build` для сборки проекта. Собранное приложение будет храниться в папке `dist/`. Используйте флаг `--prod` для сборки продакшн версии.
