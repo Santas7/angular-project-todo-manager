@@ -1,5 +1,5 @@
 # TODO APP
-![Снимок экрана 2024-05-07 в 11 55 12](https://github.com/Santas7/angular-project-todo-manager/assets/86359412/f9897d54-1572-43db-90da-646ca839cb57)
+![](https://github.com/Santas7/angular-project-todo-manager/assets/86359412/f9897d54-1572-43db-90da-646ca839cb57)
 
 ![](https://img.shields.io/badge/Code-Angular-informational?style=flat&logo=angular&color=CC342D)
 
@@ -9,14 +9,14 @@
 
 ## Авторы
 
-- Вольгов Даниил
-- Казаков Андрей
-- Королева Алина
-- Митерев Дмитрий
-- Ненашев Дмитрий
-- Панюшкин Андрей
-- Уваров Никита
-- Федоров Александр
+- Вольгов Даниил (Дизайн, тестирование)
+- Казаков Андрей (Скрипты)
+- Королева Алина (Главная страница)
+- Митерев Дмитрий (Local storage)
+- Ненашев Дмитрий (Дизайн)
+- Панюшкин Андрей (Capitan, скрипты)
+- Уваров Никита (Скрипты)
+- Федоров Александр (Local storage, тестирование)
 
 ## Описание
 
@@ -24,13 +24,13 @@
 
 ## Функционал
 
-TODO...
+TODO ...
 
 ## Используемые технологии
 
 - Angular
 - TypeScript
-- Tailwind CSS???
+- Tailwind CSS ???
 
 ## Установка и запуск
 
