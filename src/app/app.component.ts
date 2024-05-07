@@ -1,4 +1,3 @@
-// app.component.ts
 import { Component } from '@angular/core';
 
 @Component({
@@ -7,13 +6,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  todos: string[] = [];
-
-  addTodo(newTodo: string): void {
-    this.todos.push(newTodo);
-  }
-
-  deleteTodo(index: number): void {
-    this.todos.splice(index, 1);
-  }
+  // addTodo(newTodo: string): void {
+  //   this.todos.push(newTodo);
+  // }
+  // deleteTodo(index: number): void {
+  //   this.todos.splice(index, 1);
+  // }
 }

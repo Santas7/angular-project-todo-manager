@@ -4,20 +4,22 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms'; // добавьте это
 
 import { AppComponent } from './app.component';
-import { AddTodoComponent } from './add-todo/add-todo.component';
-import { TodoListComponent } from './todo-list/todo-list.component';
-import { TodoItemComponent } from './todo-item/todo-item.component';
 
+import {RouterModule} from "@angular/router";
+import {HomeComponent} from "../components/Home/home.component";
+import {HeaderComponent} from "../components/Header/header.component";
+import {AppRoutingModule} from "./app-routing.module";
 @NgModule({
   declarations: [
-    AppComponent,
-    AddTodoComponent,
-    TodoListComponent,
-    TodoItemComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
-    FormsModule // добавьте это
+    FormsModule,
+    AppRoutingModule,
+    RouterModule,
+    HomeComponent,
+    HeaderComponent
   ],
   providers: [],
   bootstrap: [AppComponent]
