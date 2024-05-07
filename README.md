@@ -1,7 +1,5 @@
 # TODO APP
 
-![TODO APP](https://github.com/Santas7/angular-project-todo-manager/assets/86359412/ec67685e-378f-4f21-b433-188c7f1e08ac)
-
 ![](https://img.shields.io/badge/Code-Angular-informational?style=flat&logo=angular&color=CC342D)
 
 Этот проект использует [Angular CLI](https://github.com/angular/angular-cli) версии 17.3.0.
