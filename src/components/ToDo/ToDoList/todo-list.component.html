@@ -1,3 +1,10 @@
 <div>
-  <TodoItem></TodoItem>
+    <h2>ToDo List</h2>
+    <div>
+        <input type="text" [(ngModel)]="newTodo" placeholder="Введите новый ToDo">
+        <button (click)="addTodo()">Добавить</button>
+    </div>
+    <div>
+        <TodoItem *ngFor="let todo of todoList" [todo]="todo"></TodoItem>
+    </div>
 </div>
