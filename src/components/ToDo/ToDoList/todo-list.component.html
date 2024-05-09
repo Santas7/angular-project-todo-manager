@@ -1,4 +1,7 @@
 <div>
+    <div *ngIf="loading">
+        <Preloader></Preloader>
+    </div>
     <h2>ToDo List</h2>
     <div>
         <input type="text" [(ngModel)]="newTodo" placeholder="Введите новый ToDo">
