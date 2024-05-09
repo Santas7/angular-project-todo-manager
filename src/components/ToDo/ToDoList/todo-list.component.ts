@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { TodoService } from '../todo.service';
 import {TodoItemComponent} from "./ToDoItem/todo-item.component";
-import {NgForOf} from "@angular/common";
+import {NgForOf, NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
+import {HomeComponent} from "../../../common/Preloader/preloader.component";
 
 @Component({
   selector: 'TodoList',
@@ -11,19 +12,26 @@ import {FormsModule} from "@angular/forms";
   imports: [
     TodoItemComponent,
     NgForOf,
-    FormsModule
+    FormsModule,
+    NgIf,
+    HomeComponent
   ],
   styleUrls: ['./todo-list.component.css']
 })
 export class TodoListComponent implements OnInit {
   todoList: string[] = [];
   newTodo: string = '';
+  loading: boolean = true;
 
   constructor(private todoService: TodoService) { }
 
   ngOnInit(): void {
     this.todoService.getTodoList().subscribe(todoList => {
-      this.todoList = todoList;
+      setTimeout(()=>{
+        this.todoList = todoList;
+        this.loading = false;
+        console.log(this.loading);
+      }, 500);
     });
   }
 
