@@ -43,4 +43,31 @@ export class AuthService {
       this.router.navigate(['/login']);
     }
   }
+
+  // Добавление заметки в todoList
+  addNote(note: any): void {
+    const todoList = this.getTodoList();
+    todoList.push(note);
+    localStorage.setItem("todoList", JSON.stringify(todoList));
+  }
+
+  // Получение todoList из localStorage
+  getTodoList(): any[] {
+    const todoListString = localStorage.getItem("todoList");
+    return todoListString ? JSON.parse(todoListString) : [];
+  }
+
+  // Изменение заметки в todoList
+  updateNote(index: number, updatedNote: any): void {
+    const todoList = this.getTodoList();
+    todoList[index] = updatedNote;
+    localStorage.setItem("todoList", JSON.stringify(todoList));
+  }
+
+  // Удаление заметки из todoList
+  deleteNote(index: number): void {
+    const todoList = this.getTodoList();
+    todoList.splice(index, 1);
+    localStorage.setItem("todoList", JSON.stringify(todoList));
+  }
 }
