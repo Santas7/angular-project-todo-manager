@@ -17,7 +17,7 @@ import { AuthService } from '../../bll/store';
 })
 export class LoginComponent {
 
-  isSignDivVisiable: boolean  = true;
+  isSignDivVisiable: boolean  = false;
   
   signUpObj: SignUpModel  = new SignUpModel();
   loginObj: LoginModel  = new LoginModel();
