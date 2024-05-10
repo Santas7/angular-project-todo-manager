@@ -1,18 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {HomeComponent} from "../components/Home/home.component";
+import { HomeComponent } from "../components/Home/home.component";
+import { LoginComponent } from "../components/Login/login.component";
 import {TodoComponent} from "../components/ToDo/todo.component";
-import {LoginComponent} from "../components/Login/login.component";
-import {SignInComponent} from "../components/SignIn/signin.component";
-import {CaptchaComponent} from "../components/Captcha/captcha.component";
-import { AuthGuard } from './guard';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent },
-  { path: 'todo', component: TodoComponent },
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: 'home', component: HomeComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'signin', component: SignInComponent },
-  { path: 'captcha', component: CaptchaComponent },
+  {path: 'todo', component: TodoComponent}
 ];
 
 @NgModule({
