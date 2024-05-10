@@ -1,5 +1,7 @@
 import { Component } from "@angular/core";
 import {RouterLink} from "@angular/router";
+import {isRegistered, logOut} from "../../bll/store";
+import {NgIf} from "@angular/common";
 
 @Component({
   selector: 'Header',
@@ -7,8 +9,12 @@ import {RouterLink} from "@angular/router";
   styleUrls: ['./header.component.css'],
   standalone: true,
   imports: [
-    RouterLink
+    RouterLink,
+    NgIf
   ],
   exportAs: 'Header'
 })
-export class HeaderComponent {}
+export class HeaderComponent {
+  protected readonly isRegistered = isRegistered;
+  protected readonly logOut = logOut;
+}

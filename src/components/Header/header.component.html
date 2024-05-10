@@ -6,8 +6,13 @@
   <nav>
     <ul>
       <li><a routerLink="/" >Home</a></li>
-      <li><a routerLink="/todo" >TODO</a></li>
-      <!-- тут кнопка входа/регистрации где то должна быть -->
+      <div *ngIf="isRegistered(); else loginBlock">
+        <li><a routerLink="/todo" >TODO</a></li>
+        <li><button (click)="logOut()">Log Out</button></li>
+    </div>
+    <ng-template #loginBlock>
+        <li><a routerLink="/login" >Login</a></li>
+    </ng-template>
     </ul>
   </nav>
 </header>
