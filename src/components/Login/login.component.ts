@@ -3,6 +3,9 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../bll/store';
+import {LoginModel, SignInComponent} from "./SignIn/SignIn.component";
+import {SignUpComponent, SignUpModel} from "./SignUp/SignUp.component";
+import {ToggleWelcomeComponent} from "./ToggleWelcome/toggle-welcome.component";
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -12,13 +15,13 @@ import { AuthService } from '../../bll/store';
   ],
   imports: [
     FormsModule,
-    CommonModule
+    CommonModule,
+    SignInComponent,
+    SignUpComponent,
+    ToggleWelcomeComponent
   ]
 })
 export class LoginComponent {
-
-  isSignDivVisiable: boolean  = false;
-  
   signUpObj: SignUpModel  = new SignUpModel();
   loginObj: LoginModel  = new LoginModel();
   constructor(private authService: AuthService, private router: Router){}
@@ -31,25 +34,5 @@ export class LoginComponent {
   }
 }
 
-export class SignUpModel  {
-  name: string;
-  email: string;
-  password: string;
 
-  constructor() {
-    this.email = "";
-    this.name = "";
-    this.password= ""
-  }
-}
 
-export class LoginModel  { 
-  email: string;
-  password: string;
-  todoList: string[];
-  constructor() {
-    this.email = ""; 
-    this.password= "";
-    this.todoList=[""]
-  }
-}

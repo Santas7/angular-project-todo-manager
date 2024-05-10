@@ -1,25 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { TodoService } from '../todo.service';
-import {TodoItemComponent} from "./ToDoItem/todo-item.component";
-import {NgForOf, NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
-import {HomeComponent} from "../../../common/Preloader/preloader.component";
+import {TodoItemComponent} from "./ToDoItem/todo-item.component";
+import {NgForOf} from "@angular/common";
 
 @Component({
   selector: 'TodoList',
   templateUrl: './todo-list.component.html',
   standalone: true,
   imports: [
-    TodoItemComponent,
-    NgForOf,
     FormsModule,
-    NgIf,
-    HomeComponent
+    TodoItemComponent,
+    NgForOf
   ],
   styleUrls: ['./todo-list.component.css']
 })
 export class TodoListComponent implements OnInit {
-  todoList: string[] = [];
+  todoList: any[] = [];
   newTodo: string = '';
   loading: boolean = true;
 
@@ -40,5 +37,9 @@ export class TodoListComponent implements OnInit {
       this.todoService.addTodo(this.newTodo.trim());
       this.newTodo = '';
     }
+  }
+
+  deleteTodo(todo: any) {
+    this.todoService.deleteTodo(todo.text);
   }
 }

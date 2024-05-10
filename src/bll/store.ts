@@ -1,19 +1,19 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  constructor(private router: Router) {}
+  constructor() {}
 
   registrationUser(signUpObj: any): void {
-    const localUser = localStorage.getItem("todo-local-storage");
-    let users = [];
-    if (localUser) {
-      users = JSON.parse(localUser);
+    const localUsers = localStorage.getItem("todo-local-storage");
+    let users = {};
+    if (localUsers) {
+      users = JSON.parse(localUsers);
     }
-    users.push(signUpObj);
+    // @ts-ignore
+    users[signUpObj.email] = { name: signUpObj.name, password: signUpObj.password, todoList: [] };
     localStorage.setItem("todo-local-storage", JSON.stringify(users));
     alert("Регистрация завершена!");
   }
@@ -22,10 +22,9 @@ export class AuthService {
     const localUsers = localStorage.getItem("todo-local-storage");
     if (localUsers) {
       const users = JSON.parse(localUsers);
-      const isUserPresent = users.find((user: any) => user.email === loginObj.email && user.password === loginObj.password);
-      if (isUserPresent) {
-        localStorage.setItem("loggedUser", JSON.stringify(isUserPresent));
-        this.router.navigate(['/todo']);
+      const user = users[loginObj.email];
+      if (user && user.password === loginObj.password) {
+        localStorage.setItem("loggedUser", JSON.stringify({ email: loginObj.email, name: user.name }));
       } else {
         alert("No User Found :(");
       }
@@ -33,41 +32,55 @@ export class AuthService {
   }
 
   isRegistered(): boolean {
-    const localUsers = localStorage.getItem("loggedUser");
-    return localUsers !== null;
+    return localStorage.getItem("loggedUser") !== null;
   }
 
   logOut(): void {
-    if (localStorage.getItem("loggedUser")) {
-      localStorage.removeItem("loggedUser");
-      this.router.navigate(['/login']);
+    localStorage.removeItem("loggedUser");
+  }
+
+  addNote(note: any): void {
+    const loggedUser = localStorage.getItem("loggedUser");
+    if (loggedUser) {
+      const { email } = JSON.parse(loggedUser);
+      const localUsers = localStorage.getItem("todo-local-storage");
+      if (localUsers) {
+        const users = JSON.parse(localUsers);
+        if (users[email]) {
+          users[email].todoList.push(note);
+          localStorage.setItem("todo-local-storage", JSON.stringify(users));
+        }
+      }
     }
   }
 
-  // Добавление заметки в todoList
-  addNote(note: any): void {
-    const todoList = this.getTodoList();
-    todoList.push(note);
-    localStorage.setItem("todoList", JSON.stringify(todoList));
-  }
-
-  // Получение todoList из localStorage
   getTodoList(): any[] {
-    const todoListString = localStorage.getItem("todoList");
-    return todoListString ? JSON.parse(todoListString) : [];
+    const loggedUser = localStorage.getItem("loggedUser");
+    if (loggedUser) {
+      const { email } = JSON.parse(loggedUser);
+      const localUsers = localStorage.getItem("todo-local-storage");
+      if (localUsers) {
+        const users = JSON.parse(localUsers);
+        if (users[email]) {
+          return users[email].todoList;
+        }
+      }
+    }
+    return [];
   }
 
-  // Изменение заметки в todoList
-  updateNote(index: number, updatedNote: any): void {
-    const todoList = this.getTodoList();
-    todoList[index] = updatedNote;
-    localStorage.setItem("todoList", JSON.stringify(todoList));
-  }
-
-  // Удаление заметки из todoList
   deleteNote(index: number): void {
-    const todoList = this.getTodoList();
-    todoList.splice(index, 1);
-    localStorage.setItem("todoList", JSON.stringify(todoList));
+    const loggedUser = localStorage.getItem("loggedUser");
+    if (loggedUser) {
+      const { email } = JSON.parse(loggedUser);
+      const localUsers = localStorage.getItem("todo-local-storage");
+      if (localUsers) {
+        const users = JSON.parse(localUsers);
+        if (users[email]) {
+          users[email].todoList.splice(index, 1);
+          localStorage.setItem("todo-local-storage", JSON.stringify(users));
+        }
+      }
+    }
   }
 }
