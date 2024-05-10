@@ -1,38 +1,64 @@
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { AuthService } from '../../bll/store';
-import {LoginModel, SignInComponent} from "./SignIn/SignIn.component";
-import {SignUpComponent, SignUpModel} from "./SignUp/SignUp.component";
-import {ToggleWelcomeComponent} from "./ToggleWelcome/toggle-welcome.component";
+
+import {Store} from '../../bll/store';
+import {FormsModule} from "@angular/forms";
+import {NgClass} from "@angular/common";
+import {Router} from "@angular/router";
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   standalone: true,
-  styleUrls: [
-    './login.component.css'
-  ],
   imports: [
     FormsModule,
-    CommonModule,
-    SignInComponent,
-    SignUpComponent,
-    ToggleWelcomeComponent
-  ]
+    NgClass
+  ],
+  styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  signUpObj: SignUpModel  = new SignUpModel();
-  loginObj: LoginModel  = new LoginModel();
-  constructor(private authService: AuthService, private router: Router){}
+
+  isSignDivVisible: boolean = false;
+
+  signUpObj: SignUpModel = new SignUpModel();
+  loginObj: LoginModel = new LoginModel();
+
+  constructor(private router: Router, private store: Store) { }
 
   onRegister() {
-    this.authService.registrationUser(this.signUpObj);
+    this.store.registerUser(this.signUpObj.name, this.signUpObj.email, this.signUpObj.password);
+    alert("Регистрация успешно прошла!");
   }
+
   onLogin() {
-    this.authService.loggingInUser(this.loginObj);
+    const loggedIn = this.store.loginUser(this.loginObj.email, this.loginObj.password);
+    if (loggedIn) {
+      alert("Вы успешно вошли в систему!");
+      this.router.navigate(['/home']);
+    }
+    else {
+      alert("Ошибка входа в систему!");
+    }
   }
 }
 
+export class SignUpModel {
+  name: string;
+  email: string;
+  password: string;
 
+  constructor() {
+    this.email = "";
+    this.name = "";
+    this.password = ""
+  }
+}
 
+export class LoginModel {
+  email: string;
+  password: string;
+
+  constructor() {
+    this.email = "";
+    this.password = "";
+  }
+}

@@ -1,7 +1,8 @@
 import { Component } from "@angular/core";
 import {Router, RouterLink} from "@angular/router";
-import { AuthService } from "../../bll/store";
+
 import {NgIf} from "@angular/common";
+import {Store} from "../../bll/store";
 
 @Component({
   selector: 'Header',
@@ -14,13 +15,14 @@ import {NgIf} from "@angular/common";
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent {
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private router: Router, private store: Store) {}
 
   isRegistered(): boolean {
-    return this.authService.isRegistered();
+    let f = this.store.getCurrentUsername();
+    return f !== undefined && f !== null && f !== "";
   }
 
   logOut(): void {
-    this.authService.logOut();
+    this.store.logOut();
   }
 }
