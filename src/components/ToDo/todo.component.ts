@@ -39,6 +39,7 @@ export class TodoComponent implements OnInit {
       text: this.newNoteText,
       status: 'active'
     };
+
     this.store.addNote(username, newNote);
     // Добавляем новую заметку в текущий список заметок
     this.notes.push(newNote);
