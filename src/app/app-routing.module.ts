@@ -5,8 +5,7 @@ import {TodoComponent} from "../components/ToDo/todo.component";
 import {LoginComponent} from "../components/Login/login.component";
 import {SignInComponent} from "../components/SignIn/signin.component";
 import {CaptchaComponent} from "../components/Captcha/captcha.component";
-
-
+import { AuthGuard } from './guard';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
