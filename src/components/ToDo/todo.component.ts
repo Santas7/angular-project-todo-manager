@@ -41,9 +41,7 @@ export class TodoComponent implements OnInit {
     };
 
     this.store.addNote(username, newNote);
-    // Добавляем новую заметку в текущий список заметок
     this.notes.push(newNote);
-    // Очищаем поля ввода после добавления заметки
     this.newNoteTitle = '';
     this.newNoteText = '';
   }
@@ -51,7 +49,6 @@ export class TodoComponent implements OnInit {
   deleteNote(index: number): void {
     const username = this.store.getCurrentUsername();
     this.store.deleteNote(username, index);
-    // Удаляем заметку из текущего списка заметок
     this.notes.splice(index, 1);
   }
 
