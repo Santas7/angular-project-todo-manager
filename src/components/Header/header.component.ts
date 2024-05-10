@@ -1,20 +1,26 @@
 import { Component } from "@angular/core";
-import {RouterLink} from "@angular/router";
-import {isRegistered, logOut} from "../../bll/store";
+import {Router, RouterLink} from "@angular/router";
+import { AuthService } from "../../bll/store";
 import {NgIf} from "@angular/common";
 
 @Component({
   selector: 'Header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.css'],
   standalone: true,
   imports: [
     RouterLink,
     NgIf
   ],
-  exportAs: 'Header'
+  styleUrls: ['./header.component.css']
 })
 export class HeaderComponent {
-  protected readonly isRegistered = isRegistered;
-  protected readonly logOut = logOut;
+  constructor(private authService: AuthService, private router: Router) {}
+
+  isRegistered(): boolean {
+    return this.authService.isRegistered();
+  }
+
+  logOut(): void {
+    this.authService.logOut();
+  }
 }

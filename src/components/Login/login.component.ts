@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { registrationUser, loggingInUser } from '../../bll/store';
+import { AuthService } from '../../bll/store';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -21,13 +21,13 @@ export class LoginComponent {
   
   signUpObj: SignUpModel  = new SignUpModel();
   loginObj: LoginModel  = new LoginModel();
-  constructor(private router: Router){}
+  constructor(private authService: AuthService, private router: Router){}
 
   onRegister() {
-    registrationUser(this.signUpObj);
+    this.authService.registrationUser(this.signUpObj);
   }
   onLogin() {
-    loggingInUser(this.loginObj, this.router);
+    this.authService.loggingInUser(this.loginObj);
   }
 }
 
