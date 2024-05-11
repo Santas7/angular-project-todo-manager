@@ -29,7 +29,13 @@ export class LoginComponent {
             .subscribe((data: any) => {
                 console.log(data);
                 localStorage.setItem("current_user_email", email);
-                this.router.navigate(['/home']);
+                if (data.message === "Invalid email or password") {
+                    alert("Ошибка! Неверный email или пароль!");
+                }
+                else {
+                    alert("Вы успешно вошли в систему!");
+                    this.router.navigate(['/home']);
+                }
             }, (error: any) => {
                 console.error('Error:', error);
             });
