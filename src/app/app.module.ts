@@ -6,8 +6,9 @@ import { AppComponent } from './app.component';
 
 import {RouterModule} from "@angular/router";
 import {HomeComponent} from "../components/Home/home.component";
-import {HeaderComponent} from "../components/Header/header.component";
+
 import {AppRoutingModule} from "./app-routing.module";
+import {HttpClientModule, provideHttpClient} from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -19,9 +20,10 @@ import {AppRoutingModule} from "./app-routing.module";
     AppRoutingModule,
     RouterModule,
     HomeComponent,
-    HeaderComponent
+    HttpClientModule
   ],
-  providers: [],
+  providers: [
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

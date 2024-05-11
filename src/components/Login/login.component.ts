@@ -1,64 +1,46 @@
 import { Component } from '@angular/core';
-
-import {Store} from '../../bll/store';
+import {Router, RouterLink} from '@angular/router';
+import { ApiService } from '../../bll/store';
 import {FormsModule} from "@angular/forms";
-import {NgClass} from "@angular/common";
-import {Router} from "@angular/router";
+import {NgIf} from "@angular/common";
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  standalone: true,
-  imports: [
-    FormsModule,
-    NgClass
-  ],
-  styleUrls: ['./login.component.css']
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    standalone: true,
+    imports: [
+        FormsModule,
+        RouterLink,
+        NgIf
+    ],
+    styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
 
-  isSignDivVisible: boolean = false;
+    loginData = {
+        usernameOrEmail: '',
+        password: '',
+        rememberMe: false
+    };
 
-  signUpObj: SignUpModel = new SignUpModel();
-  loginObj: LoginModel = new LoginModel();
+    errorMessage: string = '';
 
-  constructor(private router: Router, private store: Store) { }
+    constructor(private apiService: ApiService, private router: Router) { }
 
-  onRegister() {
-    this.store.registerUser(this.signUpObj.name, this.signUpObj.email, this.signUpObj.password);
-    alert("Регистрация успешно прошла!");
-  }
-
-  onLogin() {
-    const loggedIn = this.store.loginUser(this.loginObj.email, this.loginObj.password);
-    if (loggedIn) {
-      alert("Вы успешно вошли в систему!");
-      this.router.navigate(['/home']);
+    login() {
+        this.errorMessage = ''; // Очистить предыдущие сообщения об ошибках
+        this.apiService.loginUser(this.loginData)
+            .subscribe(
+                (response: any) => {
+                    // Успешный вход, перенаправление на другую страницу (например, домашнюю страницу)
+                    this.router.navigate(['/home']);
+                },
+                (error: any) => {
+                    // Обработка ошибки входа
+                    this.errorMessage = 'Неверное имя пользователя или пароль.';
+                    console.error('Ошибка при входе:', error);
+                }
+            );
     }
-    else {
-      alert("Ошибка входа в систему!");
-    }
-  }
-}
 
-export class SignUpModel {
-  name: string;
-  email: string;
-  password: string;
-
-  constructor() {
-    this.email = "";
-    this.name = "";
-    this.password = ""
-  }
-}
-
-export class LoginModel {
-  email: string;
-  password: string;
-
-  constructor() {
-    this.email = "";
-    this.password = "";
-  }
 }

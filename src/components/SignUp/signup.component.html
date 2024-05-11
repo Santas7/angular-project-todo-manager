@@ -1,0 +1,23 @@
+<div class="container">
+    <h2>Регистрация</h2>
+    <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+    <form (ngSubmit)="signup()">
+        <div class="form-group">
+            <label for="username">Имя пользователя:</label>
+            <input type="text" class="form-control" id="username" name="username" [(ngModel)]="signupData.username">
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" class="form-control" id="email" name="email" [(ngModel)]="signupData.email">
+        </div>
+        <div class="form-group">
+            <label for="password">Пароль:</label>
+            <input type="password" class="form-control" id="password" name="password" [(ngModel)]="signupData.password">
+        </div>
+        <div class="form-group">
+            <label for="repeatPassword">Повторите пароль:</label>
+            <input type="password" class="form-control" id="repeatPassword" name="repeatPassword" [(ngModel)]="signupData.repeatPassword">
+        </div>
+        <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+    </form>
+</div>
