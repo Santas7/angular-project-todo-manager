@@ -7,13 +7,13 @@
             <li class="navbar-item">
                 <a routerLink="/" class="navbar-link">Home</a>
             </li>
-            <li class="navbar-item" *ngIf="!isLoggedIn">
+            <li class="navbar-item" *ngIf="isLoggedIn">
                 <a routerLink="/todo" class="navbar-link">TODO</a>
             </li>
-            <li class="navbar-item" *ngIf="!isLoggedIn">
+            <li class="navbar-item" *ngIf="isLoggedIn">
                 <button (click)="logout()" class="navbar-button">Logout</button>
             </li>
-            <li class="navbar-item" *ngIf="isLoggedIn">
+            <li class="navbar-item" *ngIf="!isLoggedIn">
                 <button routerLink="/login" class="navbar-button">Login</button>
             </li>
         </ul>

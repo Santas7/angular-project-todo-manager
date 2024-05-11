@@ -21,6 +21,9 @@ export class LoginComponent {
 
     constructor(private serverService: ServerService, private router: Router) { }
     ngOnInit(): void {
+        if (localStorage.getItem("current_user_email")) {
+            this.router.navigate(["/home"]);
+        }
         this.generateCaptcha();
     }
     login(email: string, password: string): void {
@@ -28,13 +31,15 @@ export class LoginComponent {
         this.serverService.login(email, password)
             .subscribe((data: any) => {
                 console.log(data);
-                localStorage.setItem("current_user_email", email);
+
                 if (data.message === "Invalid email or password") {
                     alert("Ошибка! Неверный email или пароль!");
                 }
                 else {
                     alert("Вы успешно вошли в систему!");
+                    localStorage.setItem("current_user_email", email);
                     this.router.navigate(['/home']);
+                    window.location.reload();
                 }
             }, (error: any) => {
                 console.error('Error:', error);

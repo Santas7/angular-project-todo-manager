@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import {Router, RouterLink} from "@angular/router";
+import { Component, OnInit } from '@angular/core';
+import {Router, RouterLink} from '@angular/router';
 import {NgIf} from "@angular/common";
 
 @Component({
@@ -7,24 +7,27 @@ import {NgIf} from "@angular/common";
     templateUrl: './header.component.html',
     standalone: true,
     imports: [
-        RouterLink,
-        NgIf
+        NgIf,
+        RouterLink
     ],
     styleUrls: ['./header.component.css']
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
     isLoggedIn: boolean = false;
 
-    constructor(private router: Router) {
-        if (typeof localStorage !== 'undefined') {
-            this.isLoggedIn = localStorage.getItem('current_user_email') !== null;
-        } else {
-            this.isLoggedIn = false;
-        }
+    constructor(private router: Router) {}
+
+    ngOnInit(): void {
+        this.refresh();
+    }
+
+    refresh(): void {
+        this.isLoggedIn = !!localStorage.getItem('current_user_email');
     }
 
     logout(): void {
         localStorage.removeItem('current_user_email');
-        this.router.navigate(["/login"])
+        this.refresh(); // Обновляем статус isLoggedIn после выхода
+        this.router.navigate(['/login']);
     }
 }
