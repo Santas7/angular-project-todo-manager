@@ -15,6 +15,7 @@ import {HomeComponent} from "../../common/Preloader/preloader.component";
         NgIf
     ]
 })
+
 export class TodoComponent implements OnInit {
     notes: any[] = [];
     title: string = '';
