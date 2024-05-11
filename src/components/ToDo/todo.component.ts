@@ -13,7 +13,8 @@ import {HomeComponent} from "../../common/Preloader/preloader.component";
         NgForOf,
         HomeComponent,
         NgIf
-    ]
+    ],
+    styleUrls: ['./todo.component.css']
 })
 
 export class TodoComponent implements OnInit {
@@ -21,6 +22,7 @@ export class TodoComponent implements OnInit {
     title: string = '';
     text: string = '';
     loading: boolean = true;
+    currentFilter: string = '';
 
     constructor(private serverService: ServerService) { }
 
@@ -79,14 +81,46 @@ export class TodoComponent implements OnInit {
     }
 
     deleteNote(noteId: number): void {
-        this.serverService.deleteNote(noteId).subscribe(
-            (data: any) => {
-                console.log('Note deleted successfully:', data);
-                this.loadNotes(); // Refresh the notes list after deleting a note
-            },
-            (error: any) => {
-                console.error('Error deleting note:', error);
-            }
-        );
+        const confirmation = confirm('Вы уверены, что хотите удалить эту заметку?');
+        if (confirmation) {
+            this.serverService.deleteNote(noteId).subscribe(
+                (data: any) => {
+                    console.log('Note deleted successfully:', data);
+                    this.loadNotes(); // Refresh the notes list after deleting a note
+                },
+                (error: any) => {
+                    console.error('Error deleting note:', error);
+                }
+            );
+        } else {
+            console.log('Delete canceled');
+        }
     }
+    applyFilter(filter: string): void {
+        this.currentFilter = filter;
+        if (filter === 'alphabetical_asc') {
+            this.sortAlphabetically('asc');
+        } else if (filter === 'alphabetical_desc') {
+            this.sortAlphabetically('desc');
+        }
+    }
+
+    private sortAlphabetically(order: 'asc' | 'desc'): void {
+        let filteredNotes = [...this.notes];
+
+        // Сортировка заметок по алфавиту
+        filteredNotes = filteredNotes.sort((a, b) => {
+            const titleA = a[2].toUpperCase();
+            const titleB = b[2].toUpperCase();
+            if (order === 'asc') {
+                return titleA.localeCompare(titleB);
+            } else {
+                return titleB.localeCompare(titleA);
+            }
+        });
+
+        // Присвоение отфильтрованных и отсортированных заметок обратно this.notes
+        this.notes = filteredNotes;
+    }
+
 }

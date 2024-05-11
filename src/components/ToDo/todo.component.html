@@ -1,27 +1,35 @@
 <div class="todo-container">
-    <h2>Todo List</h2>
-
+    <h2>Todo список</h2>
     <form (submit)="addNote()">
         <div class="form-group">
-            <label for="title">Title:</label>
+            <label for="title">Заголовок:</label>
             <input type="text" id="title" name="title" [(ngModel)]="title" required>
         </div>
         <div class="form-group">
-            <label for="text">Text:</label>
+            <label for="text">Текст:</label>
             <textarea id="text" name="text" [(ngModel)]="text" required></textarea>
         </div>
-        <button type="submit">Add Note</button>
+        <button type="submit">Добавить заметку</button>
     </form>
     <hr>
+    <div>
+        <button (click)="applyFilter('alphabetical_asc')">Сортировка A-Z</button>
+        <button (click)="applyFilter('alphabetical_desc')">Сортировка Z-A</button>
+    </div>
     <div *ngIf="loading">
         <Preloader></Preloader>
     </div>
     <div *ngFor="let note of notes" class="note">
-        <h3>{{ note[2] }}</h3>
-        <p>{{ note[3] }}</p>
-        <button (click)="editNote(note)">Edit</button>
-        <button (click)="deleteNote(note[0])">Delete</button>
+        <div>
+            <span>{{ note[4] }}</span>
+        </div>
+        <div>
+            <h3>{{ note[2] }}</h3>
+            <p>{{ note[3] }}</p>
+        </div>
+        <div>
+            <button (click)="editNote(note)">Изменить</button>
+            <button (click)="deleteNote(note[0])" class="delete-button">Удалить</button>
+        </div>
     </div>
-
-
 </div>
