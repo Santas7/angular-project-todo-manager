@@ -1,55 +1,59 @@
 import { Component, OnInit } from '@angular/core';
-import { Store, Note } from '../../bll/store';
-import {FormsModule} from "@angular/forms";
-import {NgForOf} from "@angular/common";
+import { Store, Note, User } from '../../bll/store';
 
 @Component({
-  selector: 'app-todo',
-  templateUrl: './todo.component.html',
-  standalone: true,
-  imports: [
-    FormsModule,
-    NgForOf
-  ],
-  styleUrls: ['./todo.component.css']
+    selector: 'app-todo',
+    templateUrl: './todo.component.html',
+    standalone: true,
+    styleUrls: ['./todo.component.css']
 })
 export class TodoComponent implements OnInit {
-  notes: Note[] = [];
-  newNoteTitle: string = '';
-  newNoteText: string = '';
-
-  constructor(private store: Store) { }
-
-  ngOnInit(): void {
-    debugger;
-    this.loadNotes();
-  }
-
-  loadNotes(): void {
-    const username = this.store.getCurrentUsername();
-    if (username) {
-      this.notes = this.store.getNotesForUser(username);
-    }
-  }
-
-  addNote(): void {
-    const username = this.store.getCurrentUsername();
-    const newNote: Note = {
-      title: this.newNoteTitle,
-      text: this.newNoteText,
-      status: 'active'
+    notes: Note[] = [];
+    newNote: Note = {
+        title: '',
+        text: '',
+        status: 'pending'
     };
 
-    this.store.addNote(username, newNote);
-    this.notes.push(newNote);
-    this.newNoteTitle = '';
-    this.newNoteText = '';
-  }
+    constructor(private store: Store) { }
 
-  deleteNote(index: number): void {
-    const username = this.store.getCurrentUsername();
-    this.store.deleteNote(username, index);
-    this.notes.splice(index, 1);
-  }
+    ngOnInit(): void {
+        // Call the method to fetch notes for the current user
+        this.fetchNotes();
+    }
 
+    fetchNotes(): void {
+        this.store.getCurrentUser().subscribe((user: User) => {
+            if (user) {
+                this.store.getNotesForUser(user.id!).subscribe(notes => {
+                    this.notes = notes;
+                });
+            }
+        });
+    }
+
+    addNote(): void {
+        if (this.newNote.title.trim() && this.newNote.text.trim()) {
+            this.store.addNote(this.newNote).subscribe(() => {
+                this.fetchNotes(); // Refresh the notes after adding
+                this.newNote = {
+                    title: '',
+                    text: '',
+                    status: 'pending'
+                };
+            });
+        }
+    }
+
+    deleteNote(noteId: number): void {
+        this.store.deleteNote(noteId).subscribe(() => {
+            this.fetchNotes(); // Refresh the notes after deleting
+        });
+    }
+
+    updateNoteStatus(note: Note): void {
+        this.store.updateNote(note).subscribe(() => {
+            this.fetchNotes(); // Refresh the notes after updating
+        });
+    }
 }

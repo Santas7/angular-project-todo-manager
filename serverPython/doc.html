@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .endpoint {
+            margin-bottom: 40px;
+            border-radius: 10px;
+            background-color: #f5f5f5;
+            padding: 20px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .endpoint h2 {
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+
+        .endpoint p {
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .endpoint code {
+            font-family: Consolas, monospace;
+            background-color: #ebebeb;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+
+        .endpoint pre {
+            background-color: #ebebeb;
+            padding: 10px;
+            border-radius: 6px;
+            overflow-x: auto;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>API Documentation</h1>
+
+    <div class="endpoint">
+        <h2>/api/auth/register</h2>
+        <p>Method: <code>POST</code></p>
+        <p>Register a new user.</p>
+        <p>Request Body:</p>
+        <pre><code>{
+            "email": "user@example.com",
+            "password": "password",
+            "rememberMe": 1,
+            "status": "active",
+            "captcha": "captcha_text"
+}</code></pre>
+    </div>
+
+    <div class="endpoint">
+        <h2>/api/auth/login</h2>
+        <p>Method: <code>POST</code></p>
+        <p>Login with existing user credentials.</p>
+        <p>Request Body:</p>
+        <pre><code>{
+            "email": "user@example.com",
+            "password": "password"
+}</code></pre>
+    </div>
+
+    <div class="endpoint">
+        <h2>/api/auth/me</h2>
+        <p>Method: <code>GET</code></p>
+        <p>Get information about the current user.</p>
+        <p>Query Parameters:</p>
+        <pre><code>?id=<em>user_id</em></code></pre>
+    </div>
+
+    <div class="endpoint">
+        <h2>/api/auth/logout</h2>
+        <p>Method: <code>POST</code></p>
+        <p>Endpoint for logging out of the system.</p>
+    </div>
+
+    <div class="endpoint">
+        <h2>/api/todo/get-notes</h2>
+        <p>Method: <code>GET</code></p>
+        <p>Get all notes for a user.</p>
+        <p>Query Parameters:</p>
+        <pre><code>?user_id=<em>user_id</em></code></pre>
+    </div>
+
+    <div class="endpoint">
+        <h2>/api/todo/add-note</h2>
+        <p>Method: <code>POST</code></p>
+        <p>Add a new note.</p>
+        <p>Request Body:</p>
+        <pre><code>{
+            "user_id": 1,
+            "title": "Note Title",
+            "text": "Note text content",
+            "status": "pending",
+            "creator": "username"
+}</code></pre>
+    </div>
+
+    <div class="endpoint">
+        <h2>/api/todo/delete-note</h2>
+        <p>Method: <code>DELETE</code></p>
+        <p>Delete a note.</p>
+        <p>Query Parameters:</p>
+        <pre><code>?note_id=<em>note_id</em></code></pre>
+    </div>
+
+    <div class="endpoint">
+        <h2>/api/todo/update-note</h2>
+        <p>Method: <code>PUT</code></p>
+        <p>Update an existing note.</p>
+        <p>Request Body:</p>
+        <pre><code>{
+            "note_id": 1,
+            "title": "Updated Note Title",
+            "text": "Updated note text content",
+            "status": "completed"
+}</code></pre>
+    </div>
+</div>
+</body>
+</html>

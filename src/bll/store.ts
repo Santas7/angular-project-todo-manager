@@ -1,116 +1,54 @@
 import { Injectable } from '@angular/core';
-import {Route, Router} from "@angular/router";
-
-export interface Note {
-  title: string;
-  text: string;
-  status: string;
-}
-
-interface User {
-  username: string;
-  email: string;
-  password: string;
-}
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class Store {
-  private users: User[] = [];
-  private notes: { [username: string]: Note[] } = {};
-  constructor(private router: Router) {this.init();}
+export class ApiService {
 
+  private baseUrl = '/api'; // Замените на ваш базовый URL API
+  private userIdKey = 'userId';
 
-  private init(): void {
-    this.users = this.getUsersFromLocalStorage() || [];
-    this.notes = this.getNotesFromLocalStorage() || {};
+  constructor(private http: HttpClient) { }
+
+  // Метод для регистрации нового пользователя
+  registerUser(userData: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/auth/register`, userData);
   }
 
-  public getNotesForUser(username: string): Note[] {
-    return this.notes[username] || [];
+  // Метод для входа существующего пользователя
+  loginUser(userData: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/auth/login`, userData);
   }
 
-  private getUsersFromLocalStorage(): User[] {
-    if (typeof localStorage !== 'undefined') {
-      const usersJson = localStorage.getItem("users");
-      return usersJson ? JSON.parse(usersJson) : [];
-    } else {
-      return [];
-    }
+  // Метод для получения информации о текущем пользователе
+  getCurrentUser(userId: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/auth/me?id=${userId}`);
   }
 
-
-  private getNotesFromLocalStorage(): { [username: string]: Note[] } {
-    if (typeof localStorage !== 'undefined') {
-      const notesJson = localStorage.getItem("notes");
-      return notesJson ? JSON.parse(notesJson) : {};
-    } else {
-      return {};
-    }
+  // Метод для выхода пользователя из системы
+  logoutUser(): Observable<any> {
+    return this.http.post(`${this.baseUrl}/auth/logout`, {});
   }
 
-
-  private saveDataToLocalStorage(): void {
-    localStorage.setItem("users", JSON.stringify(this.users));
-    localStorage.setItem("notes", JSON.stringify(this.notes));
+  // Метод для получения всех заметок пользователя
+  getNotes(userId: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/todo/get-notes?user_id=${userId}`);
   }
 
-  public registerUser(username: string, email: string, password: string): void {
-    const newUser: User = { username, email, password };
-    this.users.push(newUser);
-    this.notes[username] = [];
-    this.saveDataToLocalStorage();
-    console.log(`Пользователь ${username} успешно зарегистрирован.`);
+  // Метод для добавления новой заметки
+  addNote(noteData: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/todo/add-note`, noteData);
   }
 
-  public userExists(username: string): boolean {
-    return this.users.some(user => user.username === username);
+  // Метод для удаления заметки
+  deleteNote(noteId: number): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/todo/delete-note?note_id=${noteId}`);
   }
 
-  public loginUser(username: string, password: string): boolean {
-    const user = this.users.find(user => user.username === username);
-    if (user && user.password === password) {
-      console.log(`Пользователь ${username} успешно вошел.`);
-      localStorage.setItem("current-user", username);
-      return true;
-    } else {
-      console.log(`Пользователь ${username} не найден или неверный пароль.`);
-      return false;
-    }
-  }
-
-  public getCurrentUsername(): string {
-    if (typeof localStorage !== 'undefined') {
-      return localStorage.getItem("current-user") || "";
-    } else {
-      return "";
-    }
-  }
-
-
-  public addNote(username: string, note: Note): void {
-    if (!this.notes[username]) {
-      this.notes[username] = [];
-    }
-    this.notes[username].push(note);
-    this.saveDataToLocalStorage();
-    console.log(`Заметка добавлена для пользователя ${username}.`);
-  }
-
-  public deleteNote(username: string, index: number): void {
-    if (this.notes[username]) {
-      this.notes[username].splice(index, 1);
-      this.saveDataToLocalStorage();
-      console.log(`Заметка удалена для пользователя ${username}.`);
-    } else {
-      console.log(`Пользователь ${username} не имеет заметок.`);
-    }
-  }
-
-  public logOut(): void {
-    localStorage.removeItem("current-user");
-    this.router.navigate(['/login']);
-    console.log("Пользователь вышел из системы.");
+  // Метод для обновления существующей заметки
+  updateNote(noteData: any): Observable<any> {
+    return this.http.put(`${this.baseUrl}/todo/update-note`, noteData);
   }
 }

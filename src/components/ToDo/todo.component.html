@@ -1,15 +1,24 @@
 <div>
-    <h2>Заметки</h2>
-    <form (submit)="addNote()">
-        <input type="text" [(ngModel)]="newNoteTitle" placeholder="Заголовок" required><br/>
-        <textarea [(ngModel)]="newNoteText" placeholder="Текст заметки" required></textarea><br/>
-        <button type="submit">Добавить заметку</button>
-    </form>
+    <h2>My Notes</h2>
     <ul>
-        <li *ngFor="let note of notes; let i = index">
-            <h3>{{ note.title }}</h3>
+        <li *ngFor="let note of notes">
+            <span>{{ note.title }}</span>
             <p>{{ note.text }}</p>
-            <button (click)="deleteNote(i)">Удалить</button>
+            <p>Status: {{ note.status }}</p>
+            <button (click)="deleteNote(note.id)">Delete</button>
+            <select (change)="updateNoteStatus(note, $event.target.value)">
+                <option *ngFor="let status of ['pending', 'completed']" [value]="status">{{ status }}</option>
+            </select>
         </li>
     </ul>
+</div>
+<div>
+    <h2>Add New Note</h2>
+    <form (submit)="addNote()">
+        <label>Title:</label>
+        <input type="text" [(ngModel)]="newNote.title" required>
+        <label>Text:</label>
+        <textarea [(ngModel)]="newNote.text" required></textarea>
+        <button type="submit">Add Note</button>
+    </form>
 </div>
