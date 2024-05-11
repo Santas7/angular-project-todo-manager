@@ -1,59 +1,80 @@
-import { Component, OnInit } from '@angular/core';
-import { Store, Note, User } from '../../bll/store';
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 
-@Component({
-    selector: 'app-todo',
-    templateUrl: './todo.component.html',
-    standalone: true,
-    styleUrls: ['./todo.component.css']
+@Injectable({
+  providedIn: 'root'
 })
-export class TodoComponent implements OnInit {
-    notes: Note[] = [];
-    newNote: Note = {
-        title: '',
-        text: '',
-        status: 'pending'
-    };
+export class AuthService {
+  constructor(private router: Router) {}
 
-    constructor(private store: Store) { }
-
-    ngOnInit(): void {
-        // Call the method to fetch notes for the current user
-        this.fetchNotes();
+  registrationUser(signUpObj: any): void {
+    const localUser = localStorage.getItem("todo-local-storage");
+    let users: any[] = [];
+    if (localUser) {
+      users = JSON.parse(localUser);
     }
+    users.push(signUpObj);
+    localStorage.setItem("todo-local-storage", JSON.stringify(users));
+    alert("Регистрация завершена!");
+  }
 
-    fetchNotes(): void {
-        this.store.getCurrentUser().subscribe((user: User) => {
-            if (user) {
-                this.store.getNotesForUser(user.id!).subscribe(notes => {
-                    this.notes = notes;
-                });
-            }
-        });
+  loggingInUser(loginObj: any): void {
+    const localUsers = localStorage.getItem("todo-local-storage");
+    if (localUsers) {
+      const users = JSON.parse(localUsers);
+      const isUserPresent = users.find((user: any) => user.email === loginObj.email && user.password === loginObj.password);
+      if (isUserPresent) {
+        localStorage.setItem("loggedUser", JSON.stringify(isUserPresent));
+        this.router.navigate(['/todo']);
+      } else {
+        alert("No User Found :(");
+      }
     }
+  }
 
-    addNote(): void {
-        if (this.newNote.title.trim() && this.newNote.text.trim()) {
-            this.store.addNote(this.newNote).subscribe(() => {
-                this.fetchNotes(); // Refresh the notes after adding
-                this.newNote = {
-                    title: '',
-                    text: '',
-                    status: 'pending'
-                };
-            });
-        }
-    }
+  isRegistered(): boolean {
+    return localStorage.getItem("loggedUser") !== null;
+  }
 
-    deleteNote(noteId: number): void {
-        this.store.deleteNote(noteId).subscribe(() => {
-            this.fetchNotes(); // Refresh the notes after deleting
-        });
+  logOut(): void {
+    if (localStorage.getItem("loggedUser")) {
+      localStorage.removeItem("loggedUser");
+      this.router.navigate(['/login']);
     }
+  }
 
-    updateNoteStatus(note: Note): void {
-        this.store.updateNote(note).subscribe(() => {
-            this.fetchNotes(); // Refresh the notes after updating
-        });
+  private getTodoList(): any[] {
+    const todoListString = localStorage.getItem("todoList");
+    return todoListString ? JSON.parse(todoListString) : [];
+  }
+
+  private updateTodoList(todoList: any[]): void {
+    localStorage.setItem("todoList", JSON.stringify(todoList));
+  }
+
+  addNote(note: any): void {
+    const todoList = this.getTodoList();
+    todoList.push(note);
+    this.updateTodoList(todoList);
+  }
+
+  updateNote(index: number, updatedNote: any): void {
+    const todoList = this.getTodoList();
+    if (index >= 0 && index < todoList.length) {
+      todoList[index] = updatedNote;
+      this.updateTodoList(todoList);
+    } else {
+      console.error('Invalid index for updating note.');
     }
+  }
+
+  deleteNote(index: number): void {
+    const todoList = this.getTodoList();
+    if (index >= 0 && index < todoList.length) {
+      todoList.splice(index, 1);
+      this.updateTodoList(todoList);
+    } else {
+      console.error('Invalid index for deleting note.');
+    }
+  }
 }
