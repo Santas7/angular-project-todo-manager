@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import {Router, RouterLink} from '@angular/router';
 import { ServerService } from '../../bll/store';
-import {FormsModule} from "@angular/forms"; // замените на путь к вашему сервису
+import {FormsModule} from "@angular/forms";
 
 @Component({
     selector: 'app-signup',
@@ -19,12 +19,9 @@ export class SignupComponent {
     signup(email: string, password: string): void {
         this.serverService.register(email, password)
             .subscribe((data: any) => {
-                // Обработка успешной регистрации
                 console.log(data);
-                // Перенаправление на страницу входа
-                this.router.navigate(['/login']); // замените '/login' на ваш путь
+                this.router.navigate(['/login']);
             }, (error: any) => {
-                // Обработка ошибки
                 console.error('Error:', error);
             });
     }

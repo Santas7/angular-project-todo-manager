@@ -9,7 +9,19 @@
             <label for="password">Пароль:</label>
             <input type="password" id="password" name="password" #password required>
         </div>
-        <button type="submit">Войти</button>
+
+        <button type="submit" *ngIf="isCaptchaValid">Войти</button>
     </form>
+    <div class="captcha-container" [style.display]="isCaptchaValid ? 'none' : 'block'">
+        <p>Пройдите проверку:</p>
+        <div class="captcha">
+            <span class="captcha-text">{{ generatedCaptcha }}</span>
+            <button class="refresh-button" (click)="generateCaptcha()">Обновить</button>
+        </div><br/>
+        <input type="text" [(ngModel)]="userInput" placeholder="Введите текст сюда">
+        <button (click)="checkCaptcha()">Проверить</button>
+        <p *ngIf="isCaptchaValid === true" class="valid-message">Капча верна!</p>
+        <p *ngIf="isCaptchaValid === false" class="invalid-message">Неверная капча! Попробуйте снова.</p>
+    </div>
     <a routerLink="/signup">Регистрация</a>
 </div>

@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import {Router, RouterLink} from '@angular/router';
 import { ServerService } from '../../bll/store';
-import {FormsModule} from "@angular/forms"; // замените на путь к вашему сервису
+import {FormsModule} from "@angular/forms";
+import {NgIf} from "@angular/common";
 
 @Component({
     selector: 'app-login',
@@ -9,24 +10,44 @@ import {FormsModule} from "@angular/forms"; // замените на путь к
     standalone: true,
     imports: [
         FormsModule,
-        RouterLink
+        RouterLink,
+        NgIf
     ]
 })
 export class LoginComponent {
+    generatedCaptcha?: string;
+    userInput?: string;
+    isCaptchaValid?: boolean;
 
     constructor(private serverService: ServerService, private router: Router) { }
-
+    ngOnInit(): void {
+        this.generateCaptcha();
+    }
     login(email: string, password: string): void {
+
         this.serverService.login(email, password)
             .subscribe((data: any) => {
-                // Обработка успешного входа
                 console.log(data);
                 localStorage.setItem("current_user_email", email);
-                // Перенаправление на другую страницу
-                this.router.navigate(['/home']); // замените '/dashboard' на ваш путь
+                this.router.navigate(['/home']);
             }, (error: any) => {
-                // Обработка ошибки
                 console.error('Error:', error);
             });
+    }
+
+    generateCaptcha(): void {
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let captcha = '';
+        for (let i = 0; i < 6; i++) {
+            captcha += characters.charAt(Math.floor(Math.random() * characters.length));
+        }
+        this.generatedCaptcha = captcha;
+    }
+
+    checkCaptcha(): void {
+        this.isCaptchaValid = this.userInput === this.generatedCaptcha;
+        if (!this.isCaptchaValid) {
+            this.generateCaptcha();
+        }
     }
 }
