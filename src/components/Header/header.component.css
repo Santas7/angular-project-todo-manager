@@ -1,0 +1,46 @@
+.navbar {
+    background-color: #333; /* Цвет фона */
+    color: #fff; /* Цвет текста */
+    padding: 10px 20px; /* Внутренние отступы */
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.navbar-item {
+    margin-right: 15px;
+}
+
+.navbar-link,
+.navbar-button {
+    text-decoration: none;
+    color: #fff;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 5px 10px;
+}
+
+.navbar-link:hover,
+.navbar-button:hover {
+    background-color: #555; /* Изменение цвета при наведении */
+}
+
+.navbar-link:focus,
+.navbar-button:focus {
+    outline: none; /* Убираем рамку фокуса */
+}
+
+.navbar-logo {
+    height: 40px; /* Задайте высоту логотипу по желанию */
+}

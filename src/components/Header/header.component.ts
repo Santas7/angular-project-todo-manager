@@ -16,7 +16,11 @@ export class HeaderComponent {
     isLoggedIn: boolean = false;
 
     constructor(private router: Router) {
-        this.isLoggedIn = (localStorage.getItem('current_user_email') == null);
+        if (typeof localStorage !== 'undefined') {
+            this.isLoggedIn = localStorage.getItem('current_user_email') !== null;
+        } else {
+            this.isLoggedIn = false;
+        }
     }
 
     logout(): void {
