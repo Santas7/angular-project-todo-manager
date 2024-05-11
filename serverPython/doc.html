@@ -59,7 +59,6 @@
             border-radius: 6px;
             overflow-x: auto;
         }
-
     </style>
 </head>
 <body>
@@ -109,8 +108,8 @@
         <h2>/api/todo/get-notes</h2>
         <p>Method: <code>GET</code></p>
         <p>Get all notes for a user.</p>
-        <p>Query Parameters:</p>
-        <pre><code>?user_id=<em>user_id</em></code></pre>
+        <p>Headers:</p>
+        <pre><code>Authorization: <em>user_email</em></code></pre>
     </div>
 
     <div class="endpoint">
@@ -119,11 +118,12 @@
         <p>Add a new note.</p>
         <p>Request Body:</p>
         <pre><code>{
+            "id": 1
             "user_id": 1,
             "title": "Note Title",
             "text": "Note text content",
             "status": "pending",
-            "creator": "username"
+            "creator: "asd@email.ru
 }</code></pre>
     </div>
 
@@ -141,10 +141,12 @@
         <p>Update an existing note.</p>
         <p>Request Body:</p>
         <pre><code>{
+            "id": 1,
             "note_id": 1,
             "title": "Updated Note Title",
             "text": "Updated note text content",
-            "status": "completed"
+            "status": "completed",
+            "creator": "asd@email.com"
 }</code></pre>
     </div>
 </div>

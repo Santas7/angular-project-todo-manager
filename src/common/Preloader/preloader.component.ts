@@ -6,4 +6,6 @@ import {Component} from "@angular/core";
     standalone: true,
     styleUrls: ['./preloader.component.css']
 })
-export class HomeComponent{}
+export class HomeComponent{
+
+}
