@@ -1,37 +1,47 @@
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { AuthService } from '../../bll/store';
+
+import {Store} from '../../bll/store';
+import {FormsModule} from "@angular/forms";
+import {NgClass} from "@angular/common";
+import {Router} from "@angular/router";
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   standalone: true,
-  styleUrls: [
-    './login.component.css'
-  ],
   imports: [
     FormsModule,
-    CommonModule
-  ]
+    NgClass
+  ],
+  styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
 
-  isSignDivVisiable: boolean  = false;
-  
-  signUpObj: SignUpModel  = new SignUpModel();
-  loginObj: LoginModel  = new LoginModel();
-  constructor(private authService: AuthService, private router: Router){}
+  isSignDivVisible: boolean = false;
+
+  signUpObj: SignUpModel = new SignUpModel();
+  loginObj: LoginModel = new LoginModel();
+
+  constructor(private router: Router, private store: Store) { }
 
   onRegister() {
-    this.authService.registrationUser(this.signUpObj);
+    this.store.registerUser(this.signUpObj.name, this.signUpObj.email, this.signUpObj.password);
+    alert("Регистрация успешно прошла!");
   }
+
   onLogin() {
-    this.authService.loggingInUser(this.loginObj);
+    const loggedIn = this.store.loginUser(this.loginObj.email, this.loginObj.password);
+    if (loggedIn) {
+      alert("Вы успешно вошли в систему!");
+      this.router.navigate(['/home']);
+    }
+    else {
+      alert("Ошибка входа в систему!");
+    }
   }
 }
 
-export class SignUpModel  {
+export class SignUpModel {
   name: string;
   email: string;
   password: string;
@@ -39,17 +49,16 @@ export class SignUpModel  {
   constructor() {
     this.email = "";
     this.name = "";
-    this.password= ""
+    this.password = ""
   }
 }
 
-export class LoginModel  { 
+export class LoginModel {
   email: string;
   password: string;
-  todoList: string[];
+
   constructor() {
-    this.email = ""; 
-    this.password= "";
-    this.todoList=[""]
+    this.email = "";
+    this.password = "";
   }
 }

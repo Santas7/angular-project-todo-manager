@@ -1,11 +1,11 @@
-<div class="container" [ngClass]="isSignDivVisiable ? 'active' :'' " id="container">
+<div class="container" [ngClass]="isSignDivVisible ? 'active' :'' " id="container">
     <div class="form-container sign-in" >
         <form>
             <h1>Sign In</h1>
             <input type="email" name="email" [(ngModel)]="loginObj.email" placeholder="Email">
-            <input type="password" name="password"   [(ngModel)]="loginObj.password" placeholder="Password">
+            <input type="password" name="password" [(ngModel)]="loginObj.password" placeholder="Password">
             <a href="#">→ Forget Your Password? ←</a>
-            <button (click)="onLogin()">Sign In</button>
+            <button type="button" (click)="onLogin()">Sign In</button>
         </form>
     </div>
     <div class="form-container sign-up" >
@@ -13,8 +13,8 @@
             <h1>Create Account</h1>
             <input type="text" name="name" [(ngModel)]="signUpObj.name" placeholder="Name">
             <input type="email" name="email" [(ngModel)]="signUpObj.email" placeholder="Email">
-            <input type="password" name="password"  [(ngModel)]="signUpObj.password" placeholder="Password">
-            <button (click)="onRegister()">Sign Up</button>
+            <input type="password" name="password" [(ngModel)]="signUpObj.password" placeholder="Password">
+            <button type="button" (click)="onRegister()">Sign Up</button>
         </form>
     </div>
     <div class="toggle-container">
@@ -22,12 +22,12 @@
             <div class="toggle-panel toggle-left">
                 <h1>Welcome Back!</h1>
                 <p>Enter your personal details to use all of site features</p>
-                <button type="button" class="hidden" id="login" (click)="isSignDivVisiable = false">Sign In</button>
+                <button type="button" class="hidden" id="login" (click)="isSignDivVisible = false">Sign In</button>
             </div>
             <div class="toggle-panel toggle-right">
                 <h1>Hello, Friend!</h1>
                 <p>Register with your personal details to use all of site features</p>
-                <button type="button" class="hidden" id="register" (click)="isSignDivVisiable = true">Sign Up</button>
+                <button type="button" class="hidden" id="register" (click)="isSignDivVisible = true">Sign Up</button>
             </div>
         </div>
     </div>

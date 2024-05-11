@@ -1,3 +1,15 @@
 <div>
-  <TodoList></TodoList>
+    <h2>Заметки</h2>
+    <form (submit)="addNote()">
+        <input type="text" [(ngModel)]="newNoteTitle" placeholder="Заголовок" required><br/>
+        <textarea [(ngModel)]="newNoteText" placeholder="Текст заметки" required></textarea><br/>
+        <button type="submit">Добавить заметку</button>
+    </form>
+    <ul>
+        <li *ngFor="let note of notes; let i = index">
+            <h3>{{ note.title }}</h3>
+            <p>{{ note.text }}</p>
+            <button (click)="deleteNote(i)">Удалить</button>
+        </li>
+    </ul>
 </div>

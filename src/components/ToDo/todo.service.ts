@@ -1,40 +1,29 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { AuthService } from '../../bll/store';
+import { Store, Note } from '../../bll/store';
 
 @Injectable({
     providedIn: 'root'
 })
 export class TodoService {
-    private todoListSubject: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
-    public todoList$: Observable<string[]> = this.todoListSubject.asObservable();
 
-    constructor(private authService: AuthService) {
-        const initialData = this.authService.getTodoList();
-        this.setTodoList(initialData);
+    constructor(private store: Store) { }
+
+    ngOnInit() {
+        this.getNotesForCurrentUser();
     }
 
-    public setTodoList(todoList: string[]): void {
-        this.todoListSubject.next(todoList);
+    getNotesForCurrentUser(): Note[] {
+        const username = this.store.getCurrentUsername();
+        return this.store.getNotesForUser(username);
     }
 
-    public addTodo(todo: string): void {
-        const currentList = this.todoListSubject.value;
-        const updatedList = [...currentList, todo];
-        this.todoListSubject.next(updatedList);
-        this.authService.addNote(todo); // Добавляем заметку в todoList в localStorage
+    addNoteForCurrentUser(note: Note): void {
+        const username = this.store.getCurrentUsername();
+        this.store.addNote(username, note);
     }
 
-    public deleteTodo(todo: string | undefined): void {
-        const currentList = this.todoListSubject.value;
-        const updatedList = currentList.filter(item => item !== todo);
-        this.todoListSubject.next(updatedList);
-        if (todo != null) {
-            this.authService.deleteNote(currentList.indexOf(todo));
-        } // Удаляем заметку из todoList в localStorage
-    }
-
-    public getTodoList(): Observable<string[]> {
-        return this.todoList$;
+    deleteNoteForCurrentUser(index: number): void {
+        const username = this.store.getCurrentUsername();
+        this.store.deleteNote(username, index);
     }
 }

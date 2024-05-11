@@ -1,73 +1,116 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import {Route, Router} from "@angular/router";
+
+export interface Note {
+  title: string;
+  text: string;
+  status: string;
+}
+
+interface User {
+  username: string;
+  email: string;
+  password: string;
+}
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
-  constructor(private router: Router) {}
+export class Store {
+  private users: User[] = [];
+  private notes: { [username: string]: Note[] } = {};
+  constructor(private router: Router) {this.init();}
 
-  registrationUser(signUpObj: any): void {
-    const localUser = localStorage.getItem("todo-local-storage");
-    let users = [];
-    if (localUser) {
-      users = JSON.parse(localUser);
-    }
-    users.push(signUpObj);
-    localStorage.setItem("todo-local-storage", JSON.stringify(users));
-    alert("Регистрация завершена!");
+
+  private init(): void {
+    this.users = this.getUsersFromLocalStorage() || [];
+    this.notes = this.getNotesFromLocalStorage() || {};
   }
 
-  loggingInUser(loginObj: any): void {
-    const localUsers = localStorage.getItem("todo-local-storage");
-    if (localUsers) {
-      const users = JSON.parse(localUsers);
-      const isUserPresent = users.find((user: any) => user.email === loginObj.email && user.password === loginObj.password);
-      if (isUserPresent) {
-        localStorage.setItem("loggedUser", JSON.stringify(isUserPresent));
-        this.router.navigate(['/todo']);
-      } else {
-        alert("No User Found :(");
-      }
+  public getNotesForUser(username: string): Note[] {
+    return this.notes[username] || [];
+  }
+
+  private getUsersFromLocalStorage(): User[] {
+    if (typeof localStorage !== 'undefined') {
+      const usersJson = localStorage.getItem("users");
+      return usersJson ? JSON.parse(usersJson) : [];
+    } else {
+      return [];
     }
   }
 
-  isRegistered(): boolean {
-    const localUsers = localStorage.getItem("loggedUser");
-    return localUsers !== null;
-  }
 
-  logOut(): void {
-    if (localStorage.getItem("loggedUser")) {
-      localStorage.removeItem("loggedUser");
-      this.router.navigate(['/login']);
+  private getNotesFromLocalStorage(): { [username: string]: Note[] } {
+    if (typeof localStorage !== 'undefined') {
+      const notesJson = localStorage.getItem("notes");
+      return notesJson ? JSON.parse(notesJson) : {};
+    } else {
+      return {};
     }
   }
 
-  // Добавление заметки в todoList
-  addNote(note: any): void {
-    const todoList = this.getTodoList();
-    todoList.push(note);
-    localStorage.setItem("todoList", JSON.stringify(todoList));
+
+  private saveDataToLocalStorage(): void {
+    localStorage.setItem("users", JSON.stringify(this.users));
+    localStorage.setItem("notes", JSON.stringify(this.notes));
   }
 
-  // Получение todoList из localStorage
-  getTodoList(): any[] {
-    const todoListString = localStorage.getItem("todoList");
-    return todoListString ? JSON.parse(todoListString) : [];
+  public registerUser(username: string, email: string, password: string): void {
+    const newUser: User = { username, email, password };
+    this.users.push(newUser);
+    this.notes[username] = [];
+    this.saveDataToLocalStorage();
+    console.log(`Пользователь ${username} успешно зарегистрирован.`);
   }
 
-  // Изменение заметки в todoList
-  updateNote(index: number, updatedNote: any): void {
-    const todoList = this.getTodoList();
-    todoList[index] = updatedNote;
-    localStorage.setItem("todoList", JSON.stringify(todoList));
+  public userExists(username: string): boolean {
+    return this.users.some(user => user.username === username);
   }
 
-  // Удаление заметки из todoList
-  deleteNote(index: number): void {
-    const todoList = this.getTodoList();
-    todoList.splice(index, 1);
-    localStorage.setItem("todoList", JSON.stringify(todoList));
+  public loginUser(username: string, password: string): boolean {
+    const user = this.users.find(user => user.username === username);
+    if (user && user.password === password) {
+      console.log(`Пользователь ${username} успешно вошел.`);
+      localStorage.setItem("current-user", username);
+      return true;
+    } else {
+      console.log(`Пользователь ${username} не найден или неверный пароль.`);
+      return false;
+    }
+  }
+
+  public getCurrentUsername(): string {
+    if (typeof localStorage !== 'undefined') {
+      return localStorage.getItem("current-user") || "";
+    } else {
+      return "";
+    }
+  }
+
+
+  public addNote(username: string, note: Note): void {
+    if (!this.notes[username]) {
+      this.notes[username] = [];
+    }
+    this.notes[username].push(note);
+    this.saveDataToLocalStorage();
+    console.log(`Заметка добавлена для пользователя ${username}.`);
+  }
+
+  public deleteNote(username: string, index: number): void {
+    if (this.notes[username]) {
+      this.notes[username].splice(index, 1);
+      this.saveDataToLocalStorage();
+      console.log(`Заметка удалена для пользователя ${username}.`);
+    } else {
+      console.log(`Пользователь ${username} не имеет заметок.`);
+    }
+  }
+
+  public logOut(): void {
+    localStorage.removeItem("current-user");
+    this.router.navigate(['/login']);
+    console.log("Пользователь вышел из системы.");
   }
 }
