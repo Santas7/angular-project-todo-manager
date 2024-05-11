@@ -1,80 +1,92 @@
-import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { ServerService } from '../../bll/store';
+import {FormsModule} from "@angular/forms";
+import {NgForOf, NgIf} from "@angular/common";
+import {HomeComponent} from "../../common/Preloader/preloader.component";
 
-@Injectable({
-  providedIn: 'root'
+@Component({
+    selector: 'app-todo',
+    templateUrl: './todo.component.html',
+    standalone: true,
+    imports: [
+        FormsModule,
+        NgForOf,
+        HomeComponent,
+        NgIf
+    ]
 })
-export class AuthService {
-  constructor(private router: Router) {}
 
-  registrationUser(signUpObj: any): void {
-    const localUser = localStorage.getItem("todo-local-storage");
-    let users: any[] = [];
-    if (localUser) {
-      users = JSON.parse(localUser);
+export class TodoComponent implements OnInit {
+    notes: any[] = [];
+    title: string = '';
+    text: string = '';
+    loading: boolean = true;
+
+    constructor(private serverService: ServerService) { }
+
+    ngOnInit(): void {
+        setTimeout(()=>{
+            this.loading = false;
+            this.loadNotes();
+        }, 500);
+
     }
-    users.push(signUpObj);
-    localStorage.setItem("todo-local-storage", JSON.stringify(users));
-    alert("Регистрация завершена!");
-  }
 
-  loggingInUser(loginObj: any): void {
-    const localUsers = localStorage.getItem("todo-local-storage");
-    if (localUsers) {
-      const users = JSON.parse(localUsers);
-      const isUserPresent = users.find((user: any) => user.email === loginObj.email && user.password === loginObj.password);
-      if (isUserPresent) {
-        localStorage.setItem("loggedUser", JSON.stringify(isUserPresent));
-        this.router.navigate(['/todo']);
-      } else {
-        alert("No User Found :(");
-      }
+    loadNotes(): void {
+        this.serverService.getNotes().subscribe(
+            (data: any) => {
+                this.notes = data.notes;
+                console.log('Notes:', this.notes); // Log the notes array
+            },
+            (error: any) => {
+                console.error('Error fetching notes:', error);
+            }
+        );
     }
-  }
 
-  isRegistered(): boolean {
-    return localStorage.getItem("loggedUser") !== null;
-  }
 
-  logOut(): void {
-    if (localStorage.getItem("loggedUser")) {
-      localStorage.removeItem("loggedUser");
-      this.router.navigate(['/login']);
+    addNote(): void {
+        this.serverService.addNote(this.title, this.text, 1).subscribe(
+            (data: any) => {
+                console.log('Note added successfully:', data);
+                this.loadNotes(); // Refresh the notes list after adding a new note
+                this.title = ''; // Clear input fields
+                this.text = '';
+            },
+            (error: any) => {
+                console.error('Error adding note:', error);
+            }
+        );
     }
-  }
+    editNote(note: any): void {
+        const updatedTitle = prompt('Enter the updated title:', note.title);
+        const updatedText = prompt('Enter the updated text:', note.text);
+        const updatedStatus = prompt('Enter the updated status:', note.status);
 
-  private getTodoList(): any[] {
-    const todoListString = localStorage.getItem("todoList");
-    return todoListString ? JSON.parse(todoListString) : [];
-  }
-
-  private updateTodoList(todoList: any[]): void {
-    localStorage.setItem("todoList", JSON.stringify(todoList));
-  }
-
-  addNote(note: any): void {
-    const todoList = this.getTodoList();
-    todoList.push(note);
-    this.updateTodoList(todoList);
-  }
-
-  updateNote(index: number, updatedNote: any): void {
-    const todoList = this.getTodoList();
-    if (index >= 0 && index < todoList.length) {
-      todoList[index] = updatedNote;
-      this.updateTodoList(todoList);
-    } else {
-      console.error('Invalid index for updating note.');
+        if (updatedTitle && updatedText && updatedStatus) {
+            this.serverService.updateNote(note[0], updatedTitle, updatedText, updatedStatus).subscribe(
+                (data: any) => {
+                    console.log('Note updated successfully:', data);
+                    this.loadNotes(); // Refresh the notes list after updating a note
+                },
+                (error: any) => {
+                    console.error('Error updating note:', error);
+                }
+            );
+        } else {
+            console.log('Update canceled');
+        }
     }
-  }
 
-  deleteNote(index: number): void {
-    const todoList = this.getTodoList();
-    if (index >= 0 && index < todoList.length) {
-      todoList.splice(index, 1);
-      this.updateTodoList(todoList);
-    } else {
-      console.error('Invalid index for deleting note.');
+    deleteNote(noteId: number): void {
+        this.serverService.deleteNote(noteId).subscribe(
+            (data: any) => {
+                console.log('Note deleted successfully:', data);
+                this.loadNotes(); // Refresh the notes list after deleting a note
+            },
+            (error: any) => {
+                console.error('Error deleting note:', error);
+            }
+        );
     }
-  }
 }

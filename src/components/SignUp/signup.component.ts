@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { ApiService } from '../../bll/store';
-import {FormsModule} from "@angular/forms";
-import {NgIf} from "@angular/common";
+import {Router, RouterLink} from '@angular/router';
+import { ServerService } from '../../bll/store';
+import {FormsModule} from "@angular/forms"; // замените на путь к вашему сервису
 
 @Component({
     selector: 'app-signup',
@@ -10,42 +9,23 @@ import {NgIf} from "@angular/common";
     standalone: true,
     imports: [
         FormsModule,
-        NgIf
+        RouterLink
     ]
 })
 export class SignupComponent {
 
-    signupData = {
-        username: '',
-        email: '',
-        password: '',
-        repeatPassword: ''
-    };
+    constructor(private serverService: ServerService, private router: Router) { }
 
-    errorMessage: string = '';
-
-    constructor(private apiService: ApiService, private router: Router) { }
-
-    signup() {
-        if (this.signupData.password !== this.signupData.repeatPassword) {
-            this.errorMessage = 'Пароли не совпадают.';
-            return;
-        }
-
-        this.errorMessage = ''; // Очистить предыдущие сообщения об ошибках
-
-        this.apiService.registerUser(this.signupData)
-            .subscribe(
-                (response: any) => {
-                    // Успешная регистрация, перенаправление на страницу входа
-                    this.router.navigate(['/login']);
-                },
-                (error: any) => {
-                    // Обработка ошибки регистрации
-                    this.errorMessage = 'Ошибка при регистрации пользователя.';
-                    console.error('Ошибка при регистрации:', error);
-                }
-            );
+    signup(email: string, password: string): void {
+        this.serverService.register(email, password)
+            .subscribe((data: any) => {
+                // Обработка успешной регистрации
+                console.log(data);
+                // Перенаправление на страницу входа
+                this.router.navigate(['/login']); // замените '/login' на ваш путь
+            }, (error: any) => {
+                // Обработка ошибки
+                console.error('Error:', error);
+            });
     }
-
 }

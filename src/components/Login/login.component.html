@@ -1,20 +1,15 @@
-<div class="container">
-    <h2>Вход в аккаунт</h2>
-    <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
-    <form (ngSubmit)="login()">
+<div class="login-container">
+    <h2>Login</h2>
+    <form (ngSubmit)="login(email.value, password.value)">
         <div class="form-group">
-            <label for="usernameOrEmail">Имя пользователя или Email:</label>
-            <input type="text" class="form-control" id="usernameOrEmail" name="usernameOrEmail" [(ngModel)]="loginData.usernameOrEmail">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" #email required>
         </div>
         <div class="form-group">
             <label for="password">Пароль:</label>
-            <input type="password" class="form-control" id="password" name="password" [(ngModel)]="loginData.password">
+            <input type="password" id="password" name="password" #password required>
         </div>
-        <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="rememberMe" name="rememberMe" [(ngModel)]="loginData.rememberMe">
-            <label class="form-check-label" for="rememberMe">Запомнить меня</label>
-        </div>
-        <button type="submit" class="btn btn-primary">Войти</button>
+        <button type="submit">Войти</button>
     </form>
-    <p>Нет аккаунта? <a routerLink="/signup">Зарегистрируйтесь</a></p>
+    <a routerLink="/signup">Регистрация</a>
 </div>

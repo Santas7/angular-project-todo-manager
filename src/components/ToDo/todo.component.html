@@ -1,24 +1,27 @@
-<div>
-    <h2>My Notes</h2>
-    <ul>
-        <li *ngFor="let note of notes">
-            <span>{{ note.title }}</span>
-            <p>{{ note.text }}</p>
-            <p>Status: {{ note.status }}</p>
-            <button (click)="deleteNote(note.id)">Delete</button>
-            <select (change)="updateNoteStatus(note, $event.target.value)">
-                <option *ngFor="let status of ['pending', 'completed']" [value]="status">{{ status }}</option>
-            </select>
-        </li>
-    </ul>
-</div>
-<div>
-    <h2>Add New Note</h2>
+<div class="todo-container">
+    <h2>Todo List</h2>
+
     <form (submit)="addNote()">
-        <label>Title:</label>
-        <input type="text" [(ngModel)]="newNote.title" required>
-        <label>Text:</label>
-        <textarea [(ngModel)]="newNote.text" required></textarea>
+        <div class="form-group">
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title" [(ngModel)]="title" required>
+        </div>
+        <div class="form-group">
+            <label for="text">Text:</label>
+            <textarea id="text" name="text" [(ngModel)]="text" required></textarea>
+        </div>
         <button type="submit">Add Note</button>
     </form>
+    <hr>
+    <div *ngIf="loading">
+        <Preloader></Preloader>
+    </div>
+    <div *ngFor="let note of notes" class="note">
+        <h3>{{ note[2] }}</h3>
+        <p>{{ note[3] }}</p>
+        <button (click)="editNote(note)">Edit</button>
+        <button (click)="deleteNote(note[0])">Delete</button>
+    </div>
+
+
 </div>

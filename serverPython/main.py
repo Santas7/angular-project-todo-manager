@@ -1,8 +1,15 @@
-from flask import Flask, request, jsonify, send_file
+from flask import Flask, request, jsonify, send_file, render_template
 import sqlite3
+import jwt
+import logging
+from flask_cors import CORS
 
 app = Flask(__name__)
-current_session = None
+CORS(app)
+
+# Настройка логирования
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # Создание базы данных SQLite и таблицы пользователей
 conn = sqlite3.connect('database.db')
@@ -11,6 +18,21 @@ c.execute('''CREATE TABLE IF NOT EXISTS users
              (id INTEGER PRIMARY KEY, email TEXT, password TEXT, rememberMe INTEGER, status TEXT, captcha TEXT)''')
 conn.commit()
 conn.close()
+
+# Создание базы данных SQLite и таблицы заметок
+conn = sqlite3.connect('database.db')
+c = conn.cursor()
+c.execute('''CREATE TABLE IF NOT EXISTS notes
+             (id INTEGER PRIMARY KEY, user_id INTEGER, title TEXT, text TEXT, status TEXT, creator TEXT)''')
+conn.commit()
+conn.close()
+
+
+def generate_token(user_id):
+    payload = {'user_id': user_id}
+    token = jwt.encode(payload, 'secret_key_1234', algorithm='HS256')
+    return token
+
 
 # Регистрация нового пользователя
 @app.route('/api/auth/register', methods=['POST'])
@@ -31,6 +53,7 @@ def register():
 
     return jsonify({'message': 'User registered successfully'})
 
+
 # Вход пользователя
 @app.route('/api/auth/login', methods=['POST'])
 def login():
@@ -45,22 +68,29 @@ def login():
     conn.close()
 
     if user:
-        return jsonify({'message': 'Login successful', 'user': user})
+        # Если пользователь найден, генерируем JWT токен и возвращаем его
+        token = generate_token(user[0])  # Передаем user_id для включения в payload токена
+        return jsonify({'message': 'Login successful', 'token': token})
     else:
         return jsonify({'message': 'Invalid email or password'})
+
 
 # Получение всех заметок для пользователя
 @app.route('/api/todo/get-notes', methods=['GET'])
 def get_notes():
-    user_id = request.args.get('user_id')
+    current_user_email = request.headers.get('Authorization')
 
-    conn = sqlite3.connect('database.db')
-    c = conn.cursor()
-    c.execute("SELECT * FROM notes WHERE user_id=?", (user_id,))
-    notes = c.fetchall()
-    conn.close()
+    if (current_user_email != 'null'):
+        conn = sqlite3.connect('database.db')
+        c = conn.cursor()
+        c.execute("SELECT * FROM notes WHERE creator=?", (current_user_email,))
+        notes = c.fetchall()
+        conn.close()
+        return jsonify({'notes': notes})
 
-    return jsonify({'notes': notes})
+    else:
+        return jsonify({'errors': ['id or email failed!']})
+
 
 # Добавление заметки
 @app.route('/api/todo/add-note', methods=['POST'])
@@ -70,16 +100,34 @@ def add_note():
     title = data['title']
     text = data['text']
     status = data.get('status', 'pending')
-    creator = data['creator']
+
+    # Получаем адрес электронной почты текущего пользователя из localStorage
+    current_user_email = request.headers.get('Authorization')  # Здесь вы можете добавить логику для извлечения токена и получения адреса электронной почты из localStorage
 
     conn = sqlite3.connect('database.db')
     c = conn.cursor()
     c.execute("INSERT INTO notes (user_id, title, text, status, creator) VALUES (?, ?, ?, ?, ?)",
-              (user_id, title, text, status, creator))
+              (user_id, title, text, status, current_user_email))
     conn.commit()
     conn.close()
+    # Подключение к базе данных
+    conn = sqlite3.connect('database.db')
+    c = conn.cursor()
 
+    # Выполнение запроса SELECT
+    c.execute("SELECT * FROM notes")
+
+    # Получение результатов запроса
+    rows = c.fetchall()
+
+    # Вывод результатов в терминале
+    for row in rows:
+        print(row)
+
+    # Закрытие соединения с базой данных
+    conn.close()
     return jsonify({'message': 'Note added successfully'})
+
 
 # Удаление заметки
 @app.route('/api/todo/delete-note', methods=['DELETE'])
@@ -94,23 +142,42 @@ def delete_note():
 
     return jsonify({'message': 'Note deleted successfully'})
 
+
 # Обновление данных существующей заметки
 @app.route('/api/todo/update-note', methods=['PUT'])
 def update_note():
     data = request.get_json()
-    note_id = data['note_id']
+    note_id = data['id']
     title = data['title']
     text = data['text']
     status = data.get('status', 'pending')
 
+    # Получаем адрес электронной почты текущего пользователя из заголовка запроса
+    current_user_email = request.headers.get('Authorization')
+
+    # Проверяем, что пользователь аутентифицирован
+    if not current_user_email:
+        return jsonify({'error': 'Unauthorized user'}), 401
+
+    # Соединяемся с базой данных
     conn = sqlite3.connect('database.db')
     c = conn.cursor()
-    c.execute("UPDATE notes SET title=?, text=?, status=? WHERE id=?",
-              (title, text, status, note_id))
+
+    # Проверяем, принадлежит ли заметка текущему пользователю
+    c.execute("SELECT * FROM notes WHERE id=? AND creator=?", (note_id, current_user_email))
+    note = c.fetchone()
+    if not note:
+        conn.close()
+        return jsonify({'error': 'Note not found or does not belong to the current user'}), 404
+
+    # Обновляем данные заметки
+    c.execute("UPDATE notes SET title=?, text=?, status=? WHERE id=? AND creator=?",
+              (title, text, status, note_id, current_user_email))
     conn.commit()
     conn.close()
 
     return jsonify({'message': 'Note updated successfully'})
+
 
 # Получение информации о текущем пользователе
 @app.route('/api/auth/me', methods=['GET'])
@@ -133,17 +200,29 @@ def get_current_user():
         return jsonify({'message': 'User not found'})
 
 
-# Эндпоинт для выхода из системы
 @app.route('/api/auth/logout', methods=['POST'])
 def logout():
-    global current_session
-    # Проверяем, есть ли текущая сессия
-    if current_session is None:
-        return jsonify({'message': 'No active session'}), 400
+    # Получаем токен из заголовка запроса
+    token = request.headers.get('Authorization')
 
-    # Логика для выхода из системы, например, очистка сессии
-    current_session = None
-    return jsonify({'message': 'Logged out successfully'}), 200
+    # Проверяем, есть ли токен
+    if token is None:
+        return jsonify({'message': 'No token provided'}), 400
+
+    try:
+        # Пытаемся декодировать токен
+        payload = jwt.decode(token, 'secret_key_1234', algorithms=['HS256'])
+        # Тут может быть дополнительная логика, если необходимо
+
+        # Возвращаем ответ об успешном выходе из системы
+        return jsonify({'message': 'Logged out successfully'}), 200
+    except jwt.ExpiredSignatureError:
+        # Если токен просрочен
+        return jsonify({'message': 'Token expired'}), 401
+    except jwt.InvalidTokenError:
+        # Если токен недействителен
+        return jsonify({'message': 'Invalid token'}), 401
+
 
 # Домашняя страница с документацией по API
 @app.route('/', methods=['GET'])

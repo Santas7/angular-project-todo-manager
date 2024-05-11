@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import {Router, RouterLink} from '@angular/router';
-import { ApiService } from '../../bll/store';
-import {FormsModule} from "@angular/forms";
-import {NgIf} from "@angular/common";
+import { ServerService } from '../../bll/store';
+import {FormsModule} from "@angular/forms"; // замените на путь к вашему сервису
 
 @Component({
     selector: 'app-login',
@@ -10,37 +9,24 @@ import {NgIf} from "@angular/common";
     standalone: true,
     imports: [
         FormsModule,
-        RouterLink,
-        NgIf
-    ],
-    styleUrls: ['./login.component.css']
+        RouterLink
+    ]
 })
 export class LoginComponent {
 
-    loginData = {
-        usernameOrEmail: '',
-        password: '',
-        rememberMe: false
-    };
+    constructor(private serverService: ServerService, private router: Router) { }
 
-    errorMessage: string = '';
-
-    constructor(private apiService: ApiService, private router: Router) { }
-
-    login() {
-        this.errorMessage = ''; // Очистить предыдущие сообщения об ошибках
-        this.apiService.loginUser(this.loginData)
-            .subscribe(
-                (response: any) => {
-                    // Успешный вход, перенаправление на другую страницу (например, домашнюю страницу)
-                    this.router.navigate(['/home']);
-                },
-                (error: any) => {
-                    // Обработка ошибки входа
-                    this.errorMessage = 'Неверное имя пользователя или пароль.';
-                    console.error('Ошибка при входе:', error);
-                }
-            );
+    login(email: string, password: string): void {
+        this.serverService.login(email, password)
+            .subscribe((data: any) => {
+                // Обработка успешного входа
+                console.log(data);
+                localStorage.setItem("current_user_email", email);
+                // Перенаправление на другую страницу
+                this.router.navigate(['/home']); // замените '/dashboard' на ваш путь
+            }, (error: any) => {
+                // Обработка ошибки
+                console.error('Error:', error);
+            });
     }
-
 }
