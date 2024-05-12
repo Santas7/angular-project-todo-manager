@@ -17,6 +17,7 @@ import {HomeComponent} from "../../common/Preloader/preloader.component";
     styleUrls: ['./todo.component.css']
 })
 
+
 export class TodoComponent implements OnInit {
     notes: any[] = [];
     title: string = '';
@@ -97,13 +98,14 @@ export class TodoComponent implements OnInit {
         }
     }
     applyFilter(filter: string): void {
-        this.currentFilter = filter;
+        this.currentFilter = filter; // сохраняем текущий фильтр
+        
         if (filter === 'alphabetical_asc') {
-            this.sortAlphabetically('asc');
+          this.sortAlphabetically('asc');
         } else if (filter === 'alphabetical_desc') {
-            this.sortAlphabetically('desc');
+          this.sortAlphabetically('desc');
         }
-    }
+      }
 
     private sortAlphabetically(order: 'asc' | 'desc'): void {
         let filteredNotes = [...this.notes];
@@ -122,5 +124,4 @@ export class TodoComponent implements OnInit {
         // Присвоение отфильтрованных и отсортированных заметок обратно this.notes
         this.notes = filteredNotes;
     }
-
 }

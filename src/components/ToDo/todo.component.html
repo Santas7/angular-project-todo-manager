@@ -1,35 +1,55 @@
-<div class="todo-container bg-gray-100 p-4 rounded-lg shadow">
-    <h2 class="text-2xl font-bold mb-4">Todo список</h2>
+<div class="todo-container bg-gray-800 p-4 rounded-lg shadow-lg text-white">
+    <h2 class="text-2xl font-bold mb-4 text-gray-100">Todo список</h2>
     <form (submit)="addNote()" class="space-y-4">
         <div class="form-group">
-            <label for="title" class="block text-sm font-medium text-gray-700">Заголовок:</label>
-            <input type="text" id="title" name="title" [(ngModel)]="title" required class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm">
+            <label for="title" class="block text-sm font-medium text-gray-300">Заголовок:</label>
+            <input type="text" id="title" name="title" [(ngModel)]="title" required class="mt-1 p-2 w-full border border-gray-600 rounded-md bg-gray-700 text-white">
         </div>
         <div class="form-group">
-            <label for="text" class="block text-sm font-medium text-gray-700">Текст:</label>
-            <textarea id="text" name="text" [(ngModel)]="text" required class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm"></textarea>
+            <label for="text" class="block text-sm font-medium text-gray-300">Текст:</label>
+            <textarea id="text" name="text" [(ngModel)]="text" required class="mt-1 p-2 w-full border border-gray-600 rounded-md bg-gray-700 text-white"></textarea>
         </div>
-        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Добавить заметку</button>
+        <button type="submit" class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded">Добавить заметку</button>
     </form>
-    <hr class="my-4">
+    <hr class="my-4 border-gray-700">
     <div>
-        <button (click)="applyFilter('alphabetical_asc')" class="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-3 rounded mr-2">Сортировка A-Z</button>
-        <button (click)="applyFilter('alphabetical_desc')" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded">Сортировка Z-A</button>
+        <button 
+            (click)="applyFilter('alphabetical_asc')"
+            [class.bg-gray-800]="currentFilter === 'alphabetical_asc'" 
+            [class.hover:bg-gray-600]="currentFilter === 'alphabetical_asc'" 
+            [class.bg-gray-600]="currentFilter !== 'alphabetical_asc'" 
+            [class.hover:bg-gray-800]="currentFilter !== 'alphabetical_asc'"
+            class="text-white font-bold py-1 px-3 rounded mr-2"
+        >
+        Сортировка A-Z
+        </button>
+        <button 
+            (click)="applyFilter('alphabetical_desc')"
+            [class.bg-blue-800]="currentFilter === 'alphabetical_desc'"
+            [class.hover:bg-blue-600]="currentFilter === 'alphabetical_desc'"
+            [class.bg-blue-600]="currentFilter !== 'alphabetical_desc'"
+            [class.hover:bg-blue-800]="currentFilter !== 'alphabetical_desc'"
+            class="text-white font-bold py-1 px-3 rounded"
+        >
+        Сортировка Z-A
+        </button>
+
+
     </div>
     <div *ngIf="loading">
         <Preloader></Preloader>
     </div>
-    <div *ngFor="let note of notes" class="note bg-white p-4 rounded-lg shadow mb-4">
+    <div *ngFor="let note of notes" class="note bg-gray-700 p-4 rounded-lg shadow mb-4">
         <div>
             <span>{{ note[4] }}</span>
         </div>
         <div>
-            <h3 class="text-xl font-semibold">{{ note[2] }}</h3>
-            <p>{{ note[3] }}</p>
+            <h3 class="text-xl font-semibold text-gray-100">{{ note[2] }}</h3>
+            <p class="text-gray-300">{{ note[3] }}</p>
         </div>
         <div>
-            <button (click)="editNote(note)" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-3 rounded mr-2">Изменить</button>
-            <button (click)="deleteNote(note[0])" class="delete-button bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded">Удалить</button>
+            <button (click)="editNote(note)" class="bg-yellow-600 hover:bg-yellow-800 text-white font-bold py-1 px-3 rounded mr-2">Изменить</button>
+            <button (click)="deleteNote(note[0])" class="delete-button bg-red-600 hover:bg-red-800 text-white font-bold py-1 px-3 rounded">Удалить</button>
         </div>
     </div>
 </div>
