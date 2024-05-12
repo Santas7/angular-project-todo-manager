@@ -1,35 +1,35 @@
-<div class="todo-container">
-    <h2>Todo список</h2>
-    <form (submit)="addNote()">
+<div class="todo-container bg-gray-100 p-4 rounded-lg shadow">
+    <h2 class="text-2xl font-bold mb-4">Todo список</h2>
+    <form (submit)="addNote()" class="space-y-4">
         <div class="form-group">
-            <label for="title">Заголовок:</label>
-            <input type="text" id="title" name="title" [(ngModel)]="title" required>
+            <label for="title" class="block text-sm font-medium text-gray-700">Заголовок:</label>
+            <input type="text" id="title" name="title" [(ngModel)]="title" required class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm">
         </div>
         <div class="form-group">
-            <label for="text">Текст:</label>
-            <textarea id="text" name="text" [(ngModel)]="text" required></textarea>
+            <label for="text" class="block text-sm font-medium text-gray-700">Текст:</label>
+            <textarea id="text" name="text" [(ngModel)]="text" required class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm"></textarea>
         </div>
-        <button type="submit">Добавить заметку</button>
+        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Добавить заметку</button>
     </form>
-    <hr>
+    <hr class="my-4">
     <div>
-        <button (click)="applyFilter('alphabetical_asc')">Сортировка A-Z</button>
-        <button (click)="applyFilter('alphabetical_desc')">Сортировка Z-A</button>
+        <button (click)="applyFilter('alphabetical_asc')" class="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-3 rounded mr-2">Сортировка A-Z</button>
+        <button (click)="applyFilter('alphabetical_desc')" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded">Сортировка Z-A</button>
     </div>
     <div *ngIf="loading">
         <Preloader></Preloader>
     </div>
-    <div *ngFor="let note of notes" class="note">
+    <div *ngFor="let note of notes" class="note bg-white p-4 rounded-lg shadow mb-4">
         <div>
             <span>{{ note[4] }}</span>
         </div>
         <div>
-            <h3>{{ note[2] }}</h3>
+            <h3 class="text-xl font-semibold">{{ note[2] }}</h3>
             <p>{{ note[3] }}</p>
         </div>
         <div>
-            <button (click)="editNote(note)">Изменить</button>
-            <button (click)="deleteNote(note[0])" class="delete-button">Удалить</button>
+            <button (click)="editNote(note)" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-3 rounded mr-2">Изменить</button>
+            <button (click)="deleteNote(note[0])" class="delete-button bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded">Удалить</button>
         </div>
     </div>
 </div>
