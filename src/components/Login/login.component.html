@@ -1,27 +1,37 @@
-<div class="login-container">
-    <h2>Login</h2>
-    <form (ngSubmit)="login(email.value, password.value)">
+<div class="login-container max-w-lg mx-auto p-6 bg-gray-800 rounded shadow-md text-white mt-20">
+    <h2 class="text-2xl font-bold mb-6">Login</h2>
+    <form (ngSubmit)="login(email.value, password.value)" class="space-y-4">
         <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" #email required>
+            <label for="email" class="block text-sm font-medium text-gray-300">Email:</label>
+            <input type="email" id="email" name="email" #email required class="mt-1 p-2 w-full border border-gray-600 rounded-md bg-gray-700 text-white">
         </div>
         <div class="form-group">
-            <label for="password">Пароль:</label>
-            <input type="password" id="password" name="password" #password required>
+            <label for="password" class="block text-sm font-medium text-gray-300">Пароль:</label>
+            <input type="password" id="password" name="password" #password required class="mt-1 p-2 w-full border border-gray-600 rounded-md bg-gray-700 text-white">
         </div>
 
-        <button type="submit" *ngIf="isCaptchaValid">Войти</button>
+        <button type="submit" *ngIf="isCaptchaValid" class="w-full bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded">Войти</button>
     </form>
-    <div class="captcha-container" [style.display]="isCaptchaValid ? 'none' : 'block'">
+    <div class="captcha-container mt-4" [style.display]="isCaptchaValid ? 'none' : 'block'">
         <p>Пройдите проверку:</p>
-        <div class="captcha">
-            <span class="captcha-text">{{ generatedCaptcha }}</span>
-            <button class="refresh-button" (click)="generateCaptcha()">Обновить</button>
-        </div><br/>
-        <input type="text" [(ngModel)]="userInput" placeholder="Введите текст сюда">
-        <button (click)="checkCaptcha()">Проверить</button>
-        <p *ngIf="isCaptchaValid === true" class="valid-message">Капча верна!</p>
-        <p *ngIf="isCaptchaValid === false" class="invalid-message">Неверная капча! Попробуйте снова.</p>
+        <div class="captcha flex items-center justify-between my-2">
+            <span class="captcha-text bg-gray-600 p-2 rounded text-lg font-semibold text-gray-100">{{ generatedCaptcha }}</span>
+            <button class="refresh-button bg-gray-500 hover:bg-gray-600 text-white p-2 rounded-full" (click)="generateCaptcha()">
+                <!-- Вставка SVG иконки -->
+                <svg fill="#FFFFFF" height="20px" width="20px" viewBox="0 0 489.533 489.533" xmlns="http://www.w3.org/2000/svg">
+                    <g>
+                        <path d="M268.175,488.161c98.2-11,176.9-89.5,188.1-187.7c14.7-128.4-85.1-237.7-210.2-239.1v-57.6c0-3.2-4-4.9-6.7-2.9
+                            l-118.6,87.1c-2,1.5-2,4.4,0,5.9l118.6,87.1c2.7,2,6.7,0.2,6.7-2.9v-57.5c87.9,1.4,158.3,76.2,152.3,165.6
+                            c-5.1,76.9-67.8,139.3-144.7,144.2c-81.5,5.2-150.8-53-163.2-130c-2.3-14.3-14.8-24.7-29.2-24.7c-17.9,0-31.9,15.9-29.1,33.6
+                            C49.575,418.961,150.875,501.261,268.175,488.161z"/>
+                    </g>
+                </svg>
+            </button>
+        </div>
+        <input type="text" [(ngModel)]="userInput" placeholder="Введите текст сюда" class="mt-1 p-2 w-full border border-gray-600 rounded-md bg-gray-700 text-white">
+        <button (click)="checkCaptcha()" class="mt-2 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Проверить</button>
+        <p *ngIf="isCaptchaValid === true" class="valid-message text-green-500 mt-2">Капча верна!</p>
+        <p *ngIf="isCaptchaValid === false" class="invalid-message text-red-500 mt-2">Неверная капча! Попробуйте снова.</p>
     </div>
-    <a routerLink="/signup">Регистрация</a>
+    <a routerLink="/signup" class="inline-block mt-4 text-blue-400 hover:text-blue-600">Регистрация</a>
 </div>

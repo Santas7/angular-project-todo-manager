@@ -1,20 +1,20 @@
-<nav class="navbar">
-    <div class="navbar-container">
+<nav class="bg-gray-900 text-white shadow-lg fixed top-0 w-full z-50">
+    <div class="navbar-container max-w-6xl mx-auto px-4 py-2 flex justify-between items-center">
         <div>
-            <img src="assets/logo.png" alt="logo" class="navbar-logo"/>
+            <a href="https://novayagazeta.ru/static/records/bec4ac4a0d544693a4f4414fe4d50a0d.jpeg"><img src="assets/logo.png" alt="logo" class="h-8"/></a>
         </div>
-        <ul class="navbar-list">
+        <ul class="navbar-list flex items-center gap-4">
             <li class="navbar-item">
-                <a routerLink="/" class="navbar-link">Home</a>
+                <a routerLink="/" class="navbar-link inline-block py-2 px-4 hover:text-gray-300">Home</a>
             </li>
             <li class="navbar-item" *ngIf="isLoggedIn">
-                <a routerLink="/todo" class="navbar-link">TODO</a>
+                <a routerLink="/todo" class="navbar-link inline-block py-2 px-4 hover:text-gray-300">TODO</a>
             </li>
             <li class="navbar-item" *ngIf="isLoggedIn">
-                <button (click)="logout()" class="navbar-button">Logout</button>
+                <button (click)="logout()" class="navbar-button bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded">Logout</button>
             </li>
             <li class="navbar-item" *ngIf="!isLoggedIn">
-                <button routerLink="/login" class="navbar-button">Login</button>
+                <button routerLink="/login" class="navbar-button bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded">Login</button>
             </li>
         </ul>
     </div>

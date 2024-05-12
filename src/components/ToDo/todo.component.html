@@ -1,4 +1,4 @@
-<div class="todo-container bg-gray-800 p-4 rounded-lg shadow-lg text-white">
+<div class="todo-container bg-gray-800 p-4 rounded-lg shadow-lg text-white pt-16">
     <h2 class="text-2xl font-bold mb-4 text-gray-100">Todo список</h2>
     <form (submit)="addNote()" class="space-y-4">
         <div class="form-group">
@@ -11,8 +11,9 @@
         </div>
         <button type="submit" class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded">Добавить заметку</button>
     </form>
-    <hr class="my-4 border-gray-700">
-    <div>
+    <hr class="my-4 h-0.5 bg-gray-500">
+
+    <div class="mb-8">
         <button 
             (click)="applyFilter('alphabetical_asc')"
             [class.bg-gray-800]="currentFilter === 'alphabetical_asc'" 
@@ -33,23 +34,22 @@
         >
         Сортировка Z-A
         </button>
-
-
     </div>
     <div *ngIf="loading">
         <Preloader></Preloader>
     </div>
-    <div *ngFor="let note of notes" class="note bg-gray-700 p-4 rounded-lg shadow mb-4">
-        <div>
-            <span>{{ note[4] }}</span>
-        </div>
-        <div>
-            <h3 class="text-xl font-semibold text-gray-100">{{ note[2] }}</h3>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div *ngFor="let note of notes" class="note bg-gray-700 p-4 rounded-lg shadow mb-4">
+            <!-- Обновленный flex контейнер для выравнивания заголовка и номера заметки -->
+            <div class="flex justify-between items-start">
+                <h3 class="text-xl font-semibold text-gray-100">{{ note[2] }}</h3>
+                <span class="border-red-500 border-2 p-1.5 rounded-3xl bg-red-900 bg-opacity-25 align-middle" style="font-size: smaller;">{{ note[4] }}</span>
+            </div>
             <p class="text-gray-300">{{ note[3] }}</p>
-        </div>
-        <div>
-            <button (click)="editNote(note)" class="bg-yellow-600 hover:bg-yellow-800 text-white font-bold py-1 px-3 rounded mr-2">Изменить</button>
-            <button (click)="deleteNote(note[0])" class="delete-button bg-red-600 hover:bg-red-800 text-white font-bold py-1 px-3 rounded">Удалить</button>
+            <div class="flex justify-end space-x-2">
+                <button (click)="editNote(note)" class="bg-yellow-600 hover:bg-yellow-800 text-white font-bold py-1 px-3 rounded">Изменить</button>
+                <button (click)="deleteNote(note[0])" class="delete-button bg-red-600 hover:bg-red-800 text-white font-bold py-1 px-3 rounded">Удалить</button>
+            </div>
         </div>
     </div>
 </div>
