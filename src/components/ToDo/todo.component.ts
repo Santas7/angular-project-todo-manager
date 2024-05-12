@@ -13,8 +13,7 @@ import {HomeComponent} from "../../common/Preloader/preloader.component";
         NgForOf,
         HomeComponent,
         NgIf
-    ],
-    styleUrls: ['./todo.component.css']
+    ]
 })
 
 

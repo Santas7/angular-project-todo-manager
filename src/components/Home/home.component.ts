@@ -9,6 +9,6 @@ import {HeaderComponent} from "../Header/header.component";
   imports: [
     HeaderComponent
   ],
-  styleUrls: ['./home.component.css']
+
 })
 export class HomeComponent{}

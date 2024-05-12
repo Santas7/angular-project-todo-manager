@@ -9,8 +9,7 @@ import {NgIf} from "@angular/common";
     imports: [
         NgIf,
         RouterLink
-    ],
-    styleUrls: ['./header.component.css']
+    ]
 })
 export class HeaderComponent implements OnInit {
     isLoggedIn: boolean = false;
