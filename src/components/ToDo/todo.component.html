@@ -39,17 +39,24 @@
         <Preloader></Preloader>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div *ngFor="let note of notes" class="note bg-gray-700 p-4 rounded-lg shadow mb-4">
-            <!-- Обновленный flex контейнер для выравнивания заголовка и номера заметки -->
-            <div class="flex justify-between items-start">
+        <div *ngFor="let note of notes" class="note bg-gray-700 p-4 rounded-lg shadow mb-4">            
+            <div class="flex justify-between items-start"> 
                 <h3 class="text-xl font-semibold text-gray-100">{{ note[2] }}</h3>
                 <span class="border-red-500 border-2 p-1.5 rounded-3xl bg-red-900 bg-opacity-25 align-middle" style="font-size: smaller;">{{ note[4] }}</span>
             </div>
-            <p class="text-gray-300">{{ note[3] }}</p>
+            <p class="text-gray-300 mb-2">{{ note[3] }}</p>
             <div class="flex justify-end space-x-2">
-                <button (click)="editNote(note)" class="bg-yellow-600 hover:bg-yellow-800 text-white font-bold py-1 px-3 rounded">Изменить</button>
-                <button (click)="deleteNote(note[0])" class="delete-button bg-red-600 hover:bg-red-800 text-white font-bold py-1 px-3 rounded">Удалить</button>
+                <button (click)="editNote(note)" class="bg-yellow-600 hover:bg-yellow-800 text-white font-bold py-1 px-3 rounded flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="white" height="20px" width="20px" viewBox="0 0 24 24">
+                        <g>
+                            <path d="M19.769 9.923l-12.642 12.639-7.127 1.438 1.438-7.128 12.641-12.64 5.69 5.691zm1.414-1.414l2.817-2.82-5.691-5.689-2.816 2.817 5.69 5.692z"/>
+                        </g>
+                    </svg>
+                </button>                               
+                <button (click)="deleteNote(note[0])" class="delete-button bg-red-600 hover:bg-red-800 text-white font-bold py-1 px-3 rounded">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
             </div>
         </div>
-    </div>
+    </div> 
 </div>
