@@ -1,5 +1,7 @@
 import {Component} from "@angular/core";
 import {HeaderComponent} from "../Header/header.component";
+import {RouterLink} from "@angular/router";
+import {NgForOf, NgOptimizedImage} from "@angular/common";
 
 
 @Component({
@@ -7,7 +9,10 @@ import {HeaderComponent} from "../Header/header.component";
   templateUrl: './home.component.html',
   standalone: true,
   imports: [
-    HeaderComponent
+    HeaderComponent,
+    RouterLink,
+    NgOptimizedImage,
+    NgForOf
   ],
 
 })
