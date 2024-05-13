@@ -14,7 +14,7 @@ import {NgIf} from "@angular/common";
 export class HeaderComponent implements OnInit {
     isLoggedIn: boolean = false;
 
-    constructor(private router: Router) {}
+    constructor(public router: Router) {}
 
     ngOnInit(): void {
         this.refresh();

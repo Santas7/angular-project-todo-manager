@@ -14,7 +14,7 @@ import {FormsModule} from "@angular/forms";
 })
 export class SignupComponent {
 
-    constructor(private serverService: ServerService, private router: Router) { }
+    constructor(private serverService: ServerService, public router: Router) { }
 
     signup(email: string, password: string): void {
         this.serverService.register(email, password)
