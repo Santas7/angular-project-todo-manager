@@ -1,5 +1,4 @@
 # TODO APP
-![](https://github.com/Santas7/angular-project-todo-manager/assets/86359412/f9897d54-1572-43db-90da-646ca839cb57)
 
 ![](https://img.shields.io/badge/Code-Angular-informational?style=flat&logo=angular&color=CC342D)
 
