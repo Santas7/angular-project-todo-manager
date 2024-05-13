@@ -30,6 +30,7 @@ TODO ...
 - Angular
 - TypeScript
 - Tailwind CSS ???
+- Python (для backend)
 
 ## Установка и запуск
 
